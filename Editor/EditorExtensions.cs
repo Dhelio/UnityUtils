@@ -2,6 +2,7 @@ using System;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using CastrimarisStudios.Editor;
 
 namespace CastrimarisStudios.Editor.Extensions
 {
@@ -43,6 +44,20 @@ namespace CastrimarisStudios.Editor.Extensions
             textField.AddButton(buttonName, buttonBehaviour, buttonScheduledAction);
             visualElement.Add(textField);
             return visualElement;
+        }
+
+        /// <summary>
+        /// Returns the value of the enum as a string
+        /// </summary>
+        public static string GetStringValue(this Enum Value)
+        {
+            Type t = Value.GetType();
+
+            FieldInfo fi = t.GetField(Value.ToString());
+
+            StringValueAttribute[] attributes = fi.GetCustomAttributes(typeof(StringValueAttribute), false) as StringValueAttribute[];
+
+            return attributes.Length > 0 ? attributes[0].StringValue : null;
         }
     }
 }
