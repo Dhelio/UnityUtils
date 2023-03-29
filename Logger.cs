@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace CastrimarisStudios.Utilities
+namespace CastrimarisStudios.Logging
 {
     /// <summary>
     /// Custom logger

@@ -5,14 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CastrimarisStudios.Utilities
+namespace CastrimarisStudios
 {
+
     /// <summary>
     /// Simple inheritable class to make anything a singleton quickly.
     /// </summary>
-    public class SingletonMonoBehaviour<T> : MonoBehaviour
+    public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
     {
-        public static SingletonMonoBehaviour<T> Instance;
+        public static T Instance = null;
 
         public virtual void Awake() 
         {
