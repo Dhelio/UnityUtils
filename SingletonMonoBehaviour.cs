@@ -18,7 +18,7 @@ namespace CastrimarisStudios
         public virtual void Awake() 
         {
             if (Instance == null)
-                Instance = this;
+                Instance = this as T;
             else if (Instance != this)
                 Destroy(this);
         }
