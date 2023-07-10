@@ -15,7 +15,7 @@ namespace CastrimarisStudios.Core.Editor {
         #region PRIVATE VARIABLES
 
         private const string TAG = nameof(BuildTools);
-        private const string baseFileName = "Fincons_Metaverse_";
+        private const string baseFileName = "BuildBaseName";
         private const string standaloneFolderName = "LinuxStandalone";
         private const string mobileAppendName = "Mobile.apk";
         private const string questAppendName = "Quest.apk";
