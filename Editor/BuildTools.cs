@@ -18,7 +18,7 @@ namespace CastrimarisStudios.Core.Editor {
         #region PRIVATE VARIABLES
 
         private const string TAG = nameof(BuildTools);
-        private const string baseFileName = "MyApp_";
+        private const string baseFileName = "AppBaseName";
         private const string standaloneFolderName = "LinuxStandalone";
         private const string mobileAppendName = "Mobile.apk";
         private const string questAppendName = "Quest.apk";
@@ -28,11 +28,11 @@ namespace CastrimarisStudios.Core.Editor {
 
         #region PRIVATE METHODS
 
-        private static string[] FindEnabledScenes() {
-            var selectedScenes = (from scene in EditorBuildSettings.scenes
+        private static string[] FindEnabledScenesPaths() {
+            var selectedScenesPaths = (from scene in EditorBuildSettings.scenes
                                   where scene.enabled
                                   select scene.path).ToArray();
-            return selectedScenes;
+            return selectedScenesPaths;
         }
 
         private static void CheckBuildTarget(NamedBuildTarget namedBuildTarget, BuildTarget buildTarget) {
@@ -82,7 +82,7 @@ namespace CastrimarisStudios.Core.Editor {
                 targetGroup = BuildTargetGroup.Android,
                 target = BuildTarget.Android,
                 locationPathName = locationPathName,
-                scenes = FindEnabledScenes()
+                scenes = FindEnabledScenesPaths()
             });
         }
 
@@ -99,7 +99,7 @@ namespace CastrimarisStudios.Core.Editor {
                 targetGroup = BuildTargetGroup.Android,
                 target = BuildTarget.Android,
                 locationPathName = locationPathName,
-                scenes = FindEnabledScenes()
+                scenes = FindEnabledScenesPaths()
             });
         }
 
@@ -117,7 +117,7 @@ namespace CastrimarisStudios.Core.Editor {
         targetGroup = BuildTargetGroup.Standalone,
         target = BuildTarget.StandaloneLinux64,
         locationPathName = locationPathName,
-        scenes = FindEnabledScenes()
+        scenes = FindEnabledScenesPaths()
             });
         }
 
@@ -125,15 +125,34 @@ namespace CastrimarisStudios.Core.Editor {
 
         #region PUBLIC METHODS
 
+        [MenuItem("Tools/Build/Build for Android")]
+        public static void BuildAndroid() {
+            string path = EditorUtility.SaveFolderPanel("Choose APKs location", "", baseFileName);
+            if (string.IsNullOrEmpty(path))
+                return;
+            MakeOculusBuild(path);
+        }
+
+        [MenuItem("Tools/Build/Build for Quest")]
+        public static void BuildQuest() {
+            string path = EditorUtility.SaveFolderPanel("Choose APKs location", "", baseFileName);
+            if (string.IsNullOrEmpty(path))
+                return;
+            MakeOculusBuild(path);
+        }
 
         [MenuItem("Tools/Build/Build for Android and Quest")]
         public static void BuildForAndroidPhoneAndQuest() {
             string path = EditorUtility.SaveFolderPanel("Choose APKs location", "", baseFileName);
 
-            Debug.Log($"[{TAG}] - Saving player builds to {path}...");
+            if (string.IsNullOrEmpty(path))
+                return;
 
+            VersioningEditor.SkipBuild = true;
+            VersioningEditor.UpdateBuildNumber();
             MakeOculusBuild(path);
             MakeAndroidBuild(path);
+            VersioningEditor.SkipBuild = false;
         }
 
 
@@ -142,7 +161,8 @@ namespace CastrimarisStudios.Core.Editor {
         public static void BuildAndroidAndLinuxStandalone() {
             string path = EditorUtility.SaveFolderPanel("Choose builds save location.",Directory.GetCurrentDirectory(), "");
 
-            Debug.Log($"[{TAG}] - Saving player builds to {path}...");
+            if (string.IsNullOrEmpty(path))
+                return;
 
             VersioningEditor.SkipBuild = true;
             VersioningEditor.UpdateBuildNumber();
