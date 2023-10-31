@@ -6,10 +6,10 @@ namespace Castrimaris.Core {
     public static class TransformExtensions {
 
         /// <summary>
-        /// Looks for a child transform recursively.
+        /// Looks for a child <see cref="Transform"/> recursively.
         /// </summary>
-        /// <param name="Name">The name of the child transform. Can be any nested child of this Transform</param>
-        /// <returns>The child transform if found, null otherwise.</returns>
+        /// <param name="Name">The name of the child <see cref="Transform"/>. Can be any nested child of this <see cref="Transform"/></param>
+        /// <returns>The child <see cref="Transform"/> if found, null otherwise.</returns>
         public static Transform RecursiveFind(this Transform target, string Name) {
             foreach (Transform childTransform in target) {
                 if (childTransform.name == Name) {
@@ -25,7 +25,23 @@ namespace Castrimaris.Core {
         }
 
         /// <summary>
-        /// Looks for multiple childs under this transform.
+        /// Looks for a parent <see cref="Transform"/> recursively.
+        /// </summary>
+        /// <param name="Name">The name of the parent transform to look for. Can be any nested parent of this <see cref="Transform"/>.</param>
+        /// <returns>The parent <see cref="Transform"/> if found, null otherwise</returns>
+        public static Transform RecursiveFindParent(this Transform target, string Name) {
+            var name = target.parent.name;
+            if (target.parent.name == Name) {
+                return target.parent;
+            } else if (target.parent != null) {
+                return target.parent.RecursiveFindParent(Name);
+            }
+            return null;
+        }
+
+
+        /// <summary>
+        /// Looks for multiple childs under this <see cref="Transform"/>.
         /// </summary>
         /// <param name="Exact">True if the search should stop when it has found exactly the number passed names, false if it should look for more same named children.</param>
         /// <param name="Names">Names of the childs to search</param>
@@ -45,9 +61,8 @@ namespace Castrimaris.Core {
             return result.ToArray();
         }
 
-
         /// <summary>
-        /// Destroys all childs of this transform immediately. You are strogly recommended to use DestroyChilds instead.
+        /// Destroys all childs of this <see cref="Transform"/> immediately. You are strogly recommended to use DestroyChilds instead.
         /// </summary>
         /// <returns>The number of destroyed childs.</returns>
         public static int DestroyChildsImmediate(this Transform target) {
@@ -55,11 +70,11 @@ namespace Castrimaris.Core {
             for (i = 0; target.childCount > 0; i++) {
                 GameObject.DestroyImmediate(target.GetChild(0).gameObject);
             }
-            return i+1;
+            return i + 1;
         }
 
         /// <summary>
-        /// Destroys all childs of this transform.
+        /// Destroys all childs of this <see cref="Transform"/>.
         /// </summary>
         /// <returns>The number of destroyed childs.</returns>
         public static int DestroyChilds(this Transform target) {
@@ -67,11 +82,11 @@ namespace Castrimaris.Core {
             for (i = 0; i < target.childCount; i++) {
                 GameObject.Destroy(target.GetChild(i).gameObject);
             }
-            return i+1;
+            return i + 1;
         }
 
         /// <summary>
-        /// Sets all children of this transform to the indicated active state.
+        /// Sets all children of this <see cref="Transform"/> to the indicated active state.
         /// </summary>
         /// <param name="ChildrenActiveState">True if all childs should be active, false otherwise</param>
         public static void SetChildrenActiveState(this Transform target, bool ChildrenActiveState) {
@@ -89,6 +104,20 @@ namespace Castrimaris.Core {
                 target.GetChild(i).SetSiblingIndex(rng.Next(0, target.childCount - 1));
             }
         }
-        
+
+        /// <summary>
+        /// Checks if this <see cref="Transform"/> has a <see cref="Tags"/> component and compares tags.
+        /// </summary>
+        /// <param name="target">The target <see cref="Transform"/></param>
+        /// <param name="Tags">Tags to check against.</param>
+        /// <returns>True if the object has all tags.</returns>
+        public static bool HasTags(this Transform target, params string[] Tags) {
+            if (!target.gameObject.HasComponent<Tags>())
+                return false;
+
+            var tags = target.GetComponent<Tags>();
+            return tags.Has(Tags);
+        }
+
     }
 }
