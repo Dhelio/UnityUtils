@@ -1,0 +1,23 @@
+{
+    "name": "Castrimaris.HurricaneIntegration.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:81aad3b2d38222d468a5506811ee1013",
+        "GUID:d55e7dbb51eb1824ba366c6c892d969e",
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:3b8ed52f1b5c64994af4c4e0aa4b6c4b",
+        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
+        "GUID:02b64f6584613254681f49bb3dd8ebc0"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

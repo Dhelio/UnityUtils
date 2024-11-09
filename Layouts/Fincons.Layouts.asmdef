@@ -1,0 +1,16 @@
+{
+    "name": "Castrimaris.Layouts",
+    "rootNamespace": "Castrimaris.Layouts",
+    "references": [
+        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

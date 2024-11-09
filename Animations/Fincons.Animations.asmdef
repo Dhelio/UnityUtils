@@ -1,0 +1,17 @@
+{
+    "name": "Castrimaris.Animations",
+    "rootNamespace": "Castrimaris.Animations",
+    "references": [
+        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
+        "GUID:ee64ccc8a9048384dab9087a87b17a69"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,23 @@
+{
+    "name": "Castrimaris.IO.Editor",
+    "rootNamespace": "Castrimaris.IO.Editor",
+    "references": [
+        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
+        "GUID:02b64f6584613254681f49bb3dd8ebc0",
+        "GUID:de12e5542059b994c886c513a7b64f95",
+        "GUID:4f634ff4ed1927440b221b3a77cdb37f",
+        "GUID:3248779d86bd31747b5d2214f30b01ac",
+        "GUID:7958db66189566541a6363568aee1575"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

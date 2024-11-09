@@ -1,0 +1,16 @@
+{
+    "name": "Castrimaris.Interactables.Contracts",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b2a5aab36f54a4943970416e29cd69b4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,20 @@
+{
+    "name": "Castrimaris.Rendering",
+    "rootNamespace": "Castrimaris.Rendering",
+    "references": [
+        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
+        "GUID:4f634ff4ed1927440b221b3a77cdb37f",
+        "GUID:9b3a889ee773c3d4b94e14a018017967",
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:15fc0a57446b3144c949da3e2b9737a9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

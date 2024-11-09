@@ -1,0 +1,20 @@
+{
+    "name": "Castrimaris.Animations.Editor",
+    "rootNamespace": "Castrimaris.Animations.Editor",
+    "references": [
+        "GUID:0bf8d11b2cbd7324698bb91f0116a0e2",
+        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
+        "GUID:02b64f6584613254681f49bb3dd8ebc0"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

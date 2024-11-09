@@ -1,0 +1,17 @@
+{
+    "name": "Castrimaris.FinalIKIntegration",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
+        "GUID:b3b9a3e26a5307f40b9da39b9609d606"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,23 @@
+{
+    "name": "Castrimaris.Network",
+    "rootNamespace": "Castrimaris.Network",
+    "references": [
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:3b8ed52f1b5c64994af4c4e0aa4b6c4b",
+        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
+        "GUID:997cab0594030f54096e13dea151138f",
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:9f4f5bf029cebb64f983b7bdc29f62a1",
+        "GUID:d31809ff49ad8a848b20b92046641df4",
+        "GUID:ee64ccc8a9048384dab9087a87b17a69"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

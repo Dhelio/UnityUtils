@@ -1,0 +1,17 @@
+{
+    "name": "Castrimaris.IO.Contracts",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3248779d86bd31747b5d2214f30b01ac",
+        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

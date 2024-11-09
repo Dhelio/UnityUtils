@@ -1,0 +1,28 @@
+{
+    "name": "Castrimaris.IO",
+    "rootNamespace": "Castrimaris.IO",
+    "references": [
+        "GUID:a62bb8a1c49784347998b311547d53d2",
+        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
+        "GUID:4f634ff4ed1927440b221b3a77cdb37f",
+        "GUID:fe25561d224ed4743af4c60938a59d0b",
+        "GUID:5540e30183c82e84b954c033c388e06c",
+        "GUID:61106e8dfb7a4e64a96af0eccfe1209f",
+        "GUID:1b35d674e66340d489ca88f012c85b78",
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:3248779d86bd31747b5d2214f30b01ac",
+        "GUID:7958db66189566541a6363568aee1575",
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:8e25016409de9174ab72ad4a4bda08cc",
+        "GUID:aea85a2b0a033b84dbbf4af619ec4622"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

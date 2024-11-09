@@ -1,0 +1,22 @@
+{
+    "name": "Castrimaris.Vehicles",
+    "rootNamespace": "Castrimaris.Vehicles",
+    "references": [
+        "GUID:3b8ed52f1b5c64994af4c4e0aa4b6c4b",
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
+        "GUID:7f6392b650d667545be7459b779bd2d8",
+        "GUID:b2a5aab36f54a4943970416e29cd69b4",
+        "GUID:37fecd5e4b41d7e4494c147363964d0d",
+        "GUID:75c1f289a6d500545950a9d0d6e5ee73"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

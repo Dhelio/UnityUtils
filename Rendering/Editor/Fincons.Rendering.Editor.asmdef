@@ -1,0 +1,22 @@
+{
+    "name": "Castrimaris.Rendering.Editor",
+    "rootNamespace": "Castrimaris.Rendering.Editor",
+    "references": [
+        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
+        "GUID:02b64f6584613254681f49bb3dd8ebc0",
+        "GUID:1029d640910dc1249a8796d35492e31c",
+        "GUID:9b3a889ee773c3d4b94e14a018017967",
+        "GUID:4f634ff4ed1927440b221b3a77cdb37f"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
