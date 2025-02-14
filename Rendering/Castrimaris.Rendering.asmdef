@@ -2,11 +2,10 @@
     "name": "Castrimaris.Rendering",
     "rootNamespace": "Castrimaris.Rendering",
     "references": [
-        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
-        "GUID:4f634ff4ed1927440b221b3a77cdb37f",
-        "GUID:9b3a889ee773c3d4b94e14a018017967",
         "GUID:1491147abca9d7d4bb7105af628b223e",
-        "GUID:15fc0a57446b3144c949da3e2b9737a9"
+        "GUID:15fc0a57446b3144c949da3e2b9737a9",
+        "GUID:162ca88c8da0e834cbdea265125a5064",
+        "GUID:cfd48d4fb89b4fc4d9e226c9cf91d384"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

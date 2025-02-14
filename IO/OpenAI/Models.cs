@@ -1,3 +1,5 @@
+#if OPENAI
+
 using Castrimaris.Core;
 using OpenAI;
 
@@ -99,3 +101,5 @@ namespace Castrimaris.IO {
 
 
 }
+
+#endif

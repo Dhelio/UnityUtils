@@ -1,3 +1,5 @@
+#if DOTWEEN && UNITY_SPLINES
+
 using DG.Tweening;
 using Castrimaris.Attributes;
 using Castrimaris.Core.Extensions;
@@ -256,3 +258,5 @@ namespace Castrimaris.Interactables {
         #endregion
     }
 }
+
+#endif

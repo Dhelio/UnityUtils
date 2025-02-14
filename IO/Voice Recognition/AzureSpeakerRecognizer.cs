@@ -1,3 +1,5 @@
+#if AZURE
+
 using Assets.Temp;
 using Castrimaris.Attributes;
 using Castrimaris.Core.Extensions;
@@ -156,4 +158,4 @@ namespace Castrimaris.IO {
     }
 }
 
-
+#endif

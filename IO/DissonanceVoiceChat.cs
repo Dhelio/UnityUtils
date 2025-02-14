@@ -1,3 +1,5 @@
+#if DISSONANCE
+
 using Dissonance;
 using Castrimaris.IO.Contracts;
 using System.Threading.Tasks;
@@ -147,3 +149,5 @@ namespace Castrimaris.IO {
         }
     }
 }
+
+#endif

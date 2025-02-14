@@ -1,3 +1,5 @@
+#if HVR_OCULUS
+
 using Castrimaris.Core;
 using Unity.Netcode;
 using UnityEngine;
@@ -37,3 +39,5 @@ namespace Castrimaris.HurricaneIntegration {
     }
 
 }
+
+#endif

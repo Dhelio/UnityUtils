@@ -1,3 +1,4 @@
+#if OPENAI
 
 using OpenAI.Chat;
 using System.Collections.Generic;
@@ -47,3 +48,5 @@ namespace Castrimaris.IO.ScriptableObjects {
 
     }
 }
+
+#endif

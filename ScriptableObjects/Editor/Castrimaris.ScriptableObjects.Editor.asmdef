@@ -2,9 +2,9 @@
     "name": "Castrimaris.ScriptableObjects.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
         "GUID:343deaaf83e0cee4ca978e7df0b80d21",
-        "GUID:4f634ff4ed1927440b221b3a77cdb37f"
+        "GUID:162ca88c8da0e834cbdea265125a5064",
+        "GUID:cfd48d4fb89b4fc4d9e226c9cf91d384"
     ],
     "includePlatforms": [
         "Editor"

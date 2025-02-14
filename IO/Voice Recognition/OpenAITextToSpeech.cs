@@ -1,3 +1,5 @@
+#if OPENAI
+
 using Castrimaris.Attributes;
 using Castrimaris.Core.Extensions;
 using Castrimaris.Core.Monitoring;
@@ -159,3 +161,5 @@ namespace Castrimaris.IO {
         }
     }
 }
+
+#endif

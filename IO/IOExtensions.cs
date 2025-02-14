@@ -1,3 +1,5 @@
+#if DISSONANCE
+
 namespace Castrimaris.IO {
 
     public static class  IOExtensions
@@ -8,3 +10,5 @@ namespace Castrimaris.IO {
     }
 
 }
+
+#endif

@@ -1,3 +1,5 @@
+#if DISSONANCE
+
 using Dissonance;
 using Dissonance.Integrations.Offline;
 using Castrimaris.Attributes;
@@ -118,3 +120,4 @@ namespace Castrimaris.IO {
     }
 }
 
+#endif

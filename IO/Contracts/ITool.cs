@@ -1,3 +1,5 @@
+#if OPENAI
+
 using OpenAI;
 
 namespace Castrimaris.IO.Contracts {
@@ -7,3 +9,5 @@ namespace Castrimaris.IO.Contracts {
     }
 
 }
+
+#endif

@@ -3,14 +3,13 @@
     "rootNamespace": "Castrimaris.Network",
     "references": [
         "GUID:1491147abca9d7d4bb7105af628b223e",
-        "GUID:3b8ed52f1b5c64994af4c4e0aa4b6c4b",
-        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
-        "GUID:997cab0594030f54096e13dea151138f",
+        "GUID:162ca88c8da0e834cbdea265125a5064",
+        "GUID:42e4bcf7e3a8e2644ba15933ab7bc9fc",
         "GUID:e0cd26848372d4e5c891c569017e11f1",
         "GUID:9f4f5bf029cebb64f983b7bdc29f62a1",
-        "GUID:d31809ff49ad8a848b20b92046641df4",
-        "GUID:ee64ccc8a9048384dab9087a87b17a69",
-        "GUID:39c6df72127e7b84ab717ffe8b5c3682"
+        "GUID:92738311d0f39fc4484e6291837e6af3",
+        "GUID:fd1f4826917554249942281dcb8f9786",
+        "GUID:9b7bc055ce4d3e540b3e213b596f1267"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

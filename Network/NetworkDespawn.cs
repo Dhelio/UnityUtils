@@ -1,3 +1,5 @@
+#if DOTWEEN
+
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,3 +42,5 @@ namespace Castrimaris.Network {
     }
 
 }
+
+#endif

@@ -1,3 +1,5 @@
+#if DOTWEEN
+
 using DG.Tweening;
 using Castrimaris.Attributes;
 using Castrimaris.Core.Monitoring;
@@ -80,3 +82,5 @@ namespace Castrimaris.Vehicles {
         }
     }
 }
+
+#endif

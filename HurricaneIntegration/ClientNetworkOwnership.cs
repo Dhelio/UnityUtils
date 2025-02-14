@@ -1,3 +1,5 @@
+#if HVR_OCULUS
+
 using HurricaneVR.Framework.Core;
 using HurricaneVR.Framework.Core.Grabbers;
 using Unity.Netcode;
@@ -25,3 +27,5 @@ namespace Castrimaris.Network {
     }
 
 }
+
+#endif

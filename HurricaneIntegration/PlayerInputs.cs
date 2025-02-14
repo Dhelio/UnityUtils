@@ -1,3 +1,5 @@
+#if HVR_OCULUS
+
 using Castrimaris.Core;
 using Castrimaris.IO.Contracts;
 using HurricaneVR.Framework.ControllerInput;
@@ -36,3 +38,5 @@ namespace Castrimaris.HurricaneIntegration {
     }
 
 }
+
+#endif

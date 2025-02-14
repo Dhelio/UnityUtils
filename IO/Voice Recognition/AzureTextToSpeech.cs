@@ -1,3 +1,5 @@
+#if AZURE
+
 using Castrimaris.Attributes;
 using Castrimaris.Core.Exceptions;
 using Castrimaris.Core.Extensions;
@@ -270,3 +272,4 @@ namespace Castrimaris.IO {
     }
 }
 
+#endif

@@ -1,3 +1,5 @@
+#if DOTWEEN
+
 using DG.Tweening;
 using Castrimaris.Core.Extensions;
 using Castrimaris.Core.Monitoring;
@@ -141,3 +143,5 @@ namespace Castrimaris.Interactables {
 
     }
 }
+
+#endif

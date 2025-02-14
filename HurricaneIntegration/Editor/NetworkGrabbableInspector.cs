@@ -1,3 +1,5 @@
+#if HVR_OCULUS
+
 using HurricaneVR.Framework.Core;
 using HurricaneVR.Framework.Core.Grabbers;
 using System;
@@ -51,3 +53,5 @@ namespace Castrimaris.HurricaneIntegration {
         }
     }
 }
+
+#endif

@@ -1,3 +1,5 @@
+#if HVR_OCULUS
+
 using Castrimaris.UI.Contracts;
 using HurricaneVR.Framework.Core.Player;
 using UnityEngine;
@@ -21,3 +23,5 @@ namespace Castrimaris.HurricaneIntegration {
     }
 
 }
+
+#endif

@@ -1,3 +1,5 @@
+#if HVR_OCULUS
+
 using HurricaneVR.Framework.Components;
 using Unity.Netcode;
 using UnityEngine;
@@ -12,3 +14,5 @@ namespace Castrimaris.HurricaneIntegration {
     public class NetworkButton : NetworkBehaviour {}
 
 }
+
+#endif

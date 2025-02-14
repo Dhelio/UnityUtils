@@ -1,3 +1,5 @@
+#if OPENAI
+
 using Castrimaris.Attributes;
 using Castrimaris.Core;
 using Castrimaris.IO.ScriptableObjects;
@@ -316,3 +318,5 @@ namespace Castrimaris.IO {
 
     }
 }
+
+#endif

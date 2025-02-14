@@ -1,3 +1,5 @@
+#if HVR_OCULUS
+
 using Castrimaris.Attributes;
 using Castrimaris.Core.Exceptions;
 using Castrimaris.Core.Extensions;
@@ -40,3 +42,5 @@ namespace Castrimaris.HurricaneIntegration {
         }
     }
 }
+
+#endif

@@ -2,8 +2,8 @@
     "name": "Castrimaris.Player.Contracts",
     "rootNamespace": "",
     "references": [
-        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
-        "GUID:ee64ccc8a9048384dab9087a87b17a69"
+        "GUID:162ca88c8da0e834cbdea265125a5064",
+        "GUID:fd1f4826917554249942281dcb8f9786"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

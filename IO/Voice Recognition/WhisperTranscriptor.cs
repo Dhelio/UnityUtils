@@ -1,3 +1,5 @@
+#if OPENAI
+
 using Castrimaris.Attributes;
 using OpenAI.Audio;
 using System.Threading;
@@ -71,3 +73,5 @@ namespace Castrimaris.IO
     }
 
 }
+
+#endif

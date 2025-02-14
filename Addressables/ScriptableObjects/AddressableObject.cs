@@ -1,4 +1,3 @@
-using Castrimaris.Math;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -34,7 +33,7 @@ namespace Castrimaris.ScriptableObjects {
         }
 
         public virtual void Initialize() {
-            var handle = UAddressables.LoadResourceLocations(addressableLabels, UAddressables.MergeMode.Intersection, typeof(T));
+            var handle = UAddressables.LoadResourceLocationsAsync(addressableLabels, UAddressables.MergeMode.Intersection, typeof(T));
             handle.WaitForCompletion();
             resourceLocations = handle.Result;
             UAddressables.Release(handle);
@@ -54,9 +53,9 @@ namespace Castrimaris.ScriptableObjects {
                 Initialize();
             }
 
-            Index = FMath.Clamp(Index, 0, resourceLocations.Count);
+            Index = Mathf.Clamp(Index, 0, resourceLocations.Count);
 
-            handle = UAddressables.LoadAsset<T>(resourceLocations[Index]);
+            handle = UAddressables.LoadAssetAsync<T>(resourceLocations[Index]);
             handle.WaitForCompletion();
             var result = handle.Result;
 
@@ -68,7 +67,7 @@ namespace Castrimaris.ScriptableObjects {
                 Initialize();
             }
 
-            Index = FMath.Clamp(Index, 0, resourceLocations.Count);
+            Index = Mathf.Clamp(Index, 0, resourceLocations.Count);
             handle = UAddressables.LoadAssetAsync<T>(resourceLocations[Index]);
             await handle.Task;
 

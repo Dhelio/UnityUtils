@@ -1,3 +1,5 @@
+#if OPENAI
+
 using Castrimaris.Core.Editor;
 using UnityEditor;
 
@@ -30,3 +32,5 @@ namespace Castrimaris.IO.OpenAI.Embeddings {
     }
 
 }
+
+#endif

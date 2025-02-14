@@ -1,3 +1,5 @@
+#if HVR_OCULUS
+
 using Castrimaris.Attributes;
 using Castrimaris.Player;
 using HurricaneVR.Framework.Core.Player;
@@ -61,3 +63,5 @@ namespace Castrimaris.HurricaneIntegration {
     }
 
 }
+
+#endif

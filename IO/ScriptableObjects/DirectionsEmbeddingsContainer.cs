@@ -1,3 +1,5 @@
+#if OPENAI
+
 using Castrimaris.Core.Monitoring;
 using Castrimaris.IO.GoogleDirections;
 using OpenAI;
@@ -52,3 +54,5 @@ namespace Castrimaris.IO.OpenAI.Embeddings {
     }
 
 }
+
+#endif

@@ -1,3 +1,5 @@
+#if OPENAI
+
 using Castrimaris.Core.Exceptions;
 using Castrimaris.IO.GoogleDirections;
 using Castrimaris.IO.OpenAI.Embeddings;
@@ -44,7 +46,7 @@ namespace Castrimaris.IO.OpenAI {
                 $"\nIstruzioni: {instructions}" +
                 $"\nDomanda: {input}" +
                 $"\nUna volta terminato di fornire le istruzioni dici letteralmente la seguente frase senza rielaborarla: " +
-                $"\nè ora possibile salire sulla piattaforma alla mia sinistra per visualizzare i punti salienti del percorso."; 
+                $"\nï¿½ ora possibile salire sulla piattaforma alla mia sinistra per visualizzare i punti salienti del percorso."; 
             onCompletionEmbeddingAvailable.Invoke(inputWithEmbedding);
             onEmbeddingAvailable.Invoke(embedding);
         }
@@ -58,3 +60,5 @@ namespace Castrimaris.IO.OpenAI {
     }
 
 }
+
+#endif

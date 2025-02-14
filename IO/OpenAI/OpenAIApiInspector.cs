@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+#if UNITY_EDITOR && OPENAI
 using UnityEditor;
 using Castrimaris.ScriptableObjects;
 using System.Linq;

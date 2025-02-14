@@ -1,3 +1,5 @@
+#if OPENAI
+
 using Castrimaris.IO.Contracts;
 using OpenAI;
 using System.Collections.Generic;
@@ -25,3 +27,5 @@ namespace Castrimaris.IO {
     }
 
 }
+
+#endif

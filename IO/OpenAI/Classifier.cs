@@ -1,3 +1,5 @@
+#if OPENAI
+
 using Castrimaris.Core.Extensions;
 using Castrimaris.Core.Monitoring;
 using Role = OpenAI.Role;
@@ -123,3 +125,5 @@ namespace Castrimaris.IO.OpenAI {
     }
 
 }
+
+#endif

@@ -22,8 +22,8 @@ namespace Castrimaris.Audio {
             rigidbody.isKinematic = false;
             rigidbody.useGravity = false;
             rigidbody.mass = 0;
-            rigidbody.drag = 0;
-            rigidbody.angularDrag = 0;
+            rigidbody.linearDamping = 0;
+            rigidbody.angularDamping = 0;
 
             //TODO maybe detect collision only on layers?
         }

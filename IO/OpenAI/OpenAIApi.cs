@@ -1,3 +1,5 @@
+#if OPENAI
+
 using Castrimaris.Core;
 using Castrimaris.Core.Exceptions;
 using Castrimaris.ScriptableObjects;
@@ -29,3 +31,5 @@ namespace Castrimaris.IO {
         }
     }
 }
+
+#endif

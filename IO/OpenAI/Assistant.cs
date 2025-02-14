@@ -1,3 +1,5 @@
+#if OPENAI
+
 using Castrimaris.Attributes;
 using Castrimaris.Core.Exceptions;
 using Castrimaris.Core.Monitoring;
@@ -138,3 +140,5 @@ namespace Castrimaris.IO.OpenAI {
         #endregion
     }
 }
+
+#endif

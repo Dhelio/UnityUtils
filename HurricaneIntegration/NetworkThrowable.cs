@@ -1,3 +1,5 @@
+#if HVR_OCULUS
+
 using Castrimaris.HurricaneIntegration;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,3 +30,5 @@ namespace Castrimaris.HurricaneIntegration {
 
     }
 }
+
+#endif

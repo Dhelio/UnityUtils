@@ -2,11 +2,10 @@
     "name": "Castrimaris.Rendering.Editor",
     "rootNamespace": "Castrimaris.Rendering.Editor",
     "references": [
-        "GUID:f8945e5fd42fe144c9f5d7c6fd6b3fac",
-        "GUID:02b64f6584613254681f49bb3dd8ebc0",
-        "GUID:1029d640910dc1249a8796d35492e31c",
-        "GUID:9b3a889ee773c3d4b94e14a018017967",
-        "GUID:4f634ff4ed1927440b221b3a77cdb37f"
+        "GUID:162ca88c8da0e834cbdea265125a5064",
+        "GUID:923e04825bff70543828b85051780857",
+        "GUID:9c79df17c88039a42821aa876edc9f0c",
+        "GUID:cfd48d4fb89b4fc4d9e226c9cf91d384"
     ],
     "includePlatforms": [
         "Editor"

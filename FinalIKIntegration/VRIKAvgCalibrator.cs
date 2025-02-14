@@ -1,3 +1,5 @@
+#if HVR_OCULUS
+
 using Castrimaris.Core;
 using RootMotion;
 using RootMotion.FinalIK;
@@ -455,3 +457,5 @@ public static class VRIKAvgCalibrator {
         return axis;
     }
 }
+
+#endif

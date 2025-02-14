@@ -1,3 +1,5 @@
+#if HVR_OCULUS
+
 using Castrimaris.Core.Monitoring;
 using Castrimaris.Network;
 using HurricaneVR.Framework.Core;
@@ -113,3 +115,5 @@ namespace Castrimaris.HurricaneIntegration {
         #endregion
     }
 }
+
+#endif

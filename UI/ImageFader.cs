@@ -1,3 +1,5 @@
+#if DOTWEEN
+
 using DG.Tweening;
 using Castrimaris.UI.Contracts;
 using UnityEngine;
@@ -32,3 +34,5 @@ namespace Castrimaris.Player {
     }
 
 }
+
+#endif

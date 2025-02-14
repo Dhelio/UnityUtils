@@ -1,3 +1,5 @@
+#if HVR_OCULUS
+
 using Castrimaris.Core.Exceptions;
 using HurricaneVR.Framework.Weapons;
 using HurricaneVR.Framework.Weapons.Guns;
@@ -59,3 +61,5 @@ namespace Castrimaris.HurricaneIntegration {
     }
 
 }
+
+#endif

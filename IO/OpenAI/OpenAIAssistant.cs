@@ -1,3 +1,5 @@
+#if OPENAI
+
 using Castrimaris.Core.Extensions;
 using Castrimaris.Core.Monitoring;
 using UnityEngine;
@@ -26,3 +28,5 @@ namespace Castrimaris.IO {
     }
 
 }
+
+#endif

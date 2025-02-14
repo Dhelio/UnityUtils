@@ -1,3 +1,5 @@
+#if DOTWEEN
+
 using DG.Tweening;
 using Castrimaris.Attributes;
 using System;
@@ -77,3 +79,5 @@ namespace Castrimaris.Vehicles
         }
     }
 }
+
+#endif
