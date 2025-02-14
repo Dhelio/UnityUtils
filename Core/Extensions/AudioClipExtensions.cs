@@ -17,6 +17,12 @@ namespace Castrimaris.Core.Extensions {
         public static AudioClip GetAudioClip(this byte[] target) => AudioClipUtilities.GetClipFromBytes(target);
 
         /// <summary>
+        /// Creates from this <see cref="AudioClip"/> a pcm16 byte array encoded as a base64 string. Useful for reliable web audio transfer or data saving.
+        /// </summary>
+        /// <param name="target"></param>
+        public static string GetPcm16Base64String(this AudioClip target) => AudioClipUtilities.GetPcm16Base64String(target);
+
+        /// <summary>
         /// Converts this <see cref="AudioClip"/> to a base 64 string.
         /// </summary>
         public static string GetBase64(this AudioClip target) {

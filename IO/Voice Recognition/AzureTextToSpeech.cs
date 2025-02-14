@@ -1,4 +1,5 @@
 using Castrimaris.Attributes;
+using Castrimaris.Core.Exceptions;
 using Castrimaris.Core.Extensions;
 using Castrimaris.Core.Monitoring;
 using Castrimaris.IO.AzureDataStructures;
@@ -9,6 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,6 +21,8 @@ namespace Castrimaris.IO {
     /// Implementation of the Text to Speech service of Azure Cognitive Services.
     /// </summary>
     public class AzureTextToSpeech : MonoBehaviour, ITextToSpeech {
+
+        #region Private Variables
 
         private const int FREQUENCY = 24000; //24KHz
         private const string REGEX_PATTERN = "[.,!?]"; //Cutoff pattern to recognize, so that we can split dialogue efficiently with the sentences.
@@ -64,11 +68,20 @@ namespace Castrimaris.IO {
         private Queue<string> partialTextQueue = new Queue<string>();
         private Dictionary<int, AudioClip> ttsClips = new Dictionary<int, AudioClip>();
         private Coroutine playQueueCoroutine = null;
+        private CancellationTokenSource cancellationTokenSource;
+
+        #endregion
+
+        #region Properties
 
         public bool IsSpeaking => isSpeaking;
         public bool CanSpeak { get => canSpeak; set => canSpeak = value; }
         public UnityEvent OnStartedSpeaking => onStartedSpeaking;
         public UnityEvent OnStoppedSpeaking => onStoppedSpeaking;
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// Speaks a given text.
@@ -137,9 +150,19 @@ namespace Castrimaris.IO {
             return clip;
         }
 
+        public void Abort() {
+            cancellationTokenSource.Cancel();
+        }
+
+        #endregion
+
+        #region Unity Overrides
+
         private void Awake() {
-            if (speaker == null)
-                throw new MissingReferenceException($"No reference set for {nameof(speaker)}. Did you forget to assign it in the Editor?");
+            //Sanity Checks
+            if (speaker == null) throw new ReferenceMissingException(nameof(speaker));
+
+            //Initialization
             if (initializationType == InitializationTypes.OnAwake) 
                 Initialize();
         }
@@ -153,21 +176,26 @@ namespace Castrimaris.IO {
             synth.Dispose();
         }
 
+        #endregion
+
+        #region Private Methods
+
         private void Initialize() {
-            config = SpeechConfig.FromSubscription(apiKey.Key, region.AsString());
+            cancellationTokenSource = new CancellationTokenSource();
+            config = SpeechConfig.FromSubscription(apiKey.Key, region.GetStringValue());
             string chosenVoice = null;
             switch (language) {
                 case Languages.Italian:
-                    chosenVoice = italianVoice.AsString();
+                    chosenVoice = italianVoice.GetStringValue();
                     break;
                 case Languages.American:
-                    chosenVoice = americanVoice.AsString();
+                    chosenVoice = americanVoice.GetStringValue();
                     break;
                 default:
-                    chosenVoice = italianVoice.AsString();
+                    chosenVoice = italianVoice.GetStringValue();
                     break;
             }
-            config.SpeechSynthesisLanguage = language.AsString();
+            config.SpeechSynthesisLanguage = language.GetStringValue();
             config.SpeechSynthesisVoiceName = chosenVoice;
             config.SetSpeechSynthesisOutputFormat(SpeechSynthesisOutputFormat.Raw24Khz16BitMonoPcm);
             synth = new SpeechSynthesizer(config, null); //null because otherwise it will try to play audio natively; this means that it will play audio using Android's OS audio systems if on Android, or Windows OS systems on Windows.
@@ -181,6 +209,7 @@ namespace Castrimaris.IO {
         }
 
         private async void GenerateEnqueuedSpeech(string Phrase) {
+            if (CheckCancellation()) return;
             int index = ttsClips.Count;
             ttsClips.Add(index, null);
             var clip = await Generate(Phrase);
@@ -194,6 +223,7 @@ namespace Castrimaris.IO {
             isSpeaking = true;
             onStartedSpeaking.Invoke();
             while (partialTextIndex < ttsClips.Count) {
+                if (CheckCancellation()) yield break;
                 while (ttsClips[partialTextIndex] == null) {
                     yield return null;
                 }
@@ -222,6 +252,21 @@ namespace Castrimaris.IO {
                 }
             }
         }
+
+        private bool CheckCancellation() {
+            if (cancellationTokenSource.IsCancellationRequested) {
+                cancellationTokenSource = new CancellationTokenSource();
+                partialTextIndex = 0;
+                ttsClips.Clear();
+                playQueueCoroutine = null;
+                isSpeaking = false;
+                StopAllCoroutines();
+                return true;
+            }
+            return false;
+        }
+
+        #endregion
     }
 }
 

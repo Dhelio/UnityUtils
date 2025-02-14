@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using System.Threading;
 
 namespace Castrimaris.IO.OpenAI {
 
@@ -34,6 +35,7 @@ namespace Castrimaris.IO.OpenAI {
         [SerializeField] private UnityEvent<string> onUncategorized;
 
         private OpenAIApi api;
+        private CancellationTokenSource cancellationTokenSource;
 
         #endregion
 
@@ -53,7 +55,7 @@ namespace Castrimaris.IO.OpenAI {
         public async void Categorize(string input) {
             Log.D($"Trying to categorize input '{input}'");
             var messages = BuildMessages(input);
-            var chatRequest = new ChatRequest(messages: messages, model: model.AsString());
+            var chatRequest = new ChatRequest(messages: messages, model: model.GetStringValue());
             var index = await RequestCategorization(chatRequest);
             if (index < 0 || index == categories.Count) {
                 Log.D($"No categorization found for {input}. Proceding on uncategorization.");
@@ -62,6 +64,10 @@ namespace Castrimaris.IO.OpenAI {
                 Log.D($"Categorization found for {input}. Proceding on category {categories[index]}.");
                 onCategorized[index].Invoke(input);
             }
+        }
+
+        public void Abort() {
+            cancellationTokenSource.Cancel();
         }
 
         #endregion
@@ -81,12 +87,13 @@ namespace Castrimaris.IO.OpenAI {
         #region Private Methods
 
         private async Task<int> RequestCategorization(ChatRequest request) {
-            var response = await api.Client.ChatEndpoint.GetCompletionAsync(request);
+            cancellationTokenSource = new CancellationTokenSource();
+            var response = await api.Client.ChatEndpoint.GetCompletionAsync(request, cancellationTokenSource.Token);
+            if (cancellationTokenSource.IsCancellationRequested) return -1;
             var result = response.FirstChoice.Message.Content.ToString();
             Log.D($"Received response from categorization: {result}");
-            if (!categories.Contains(result)) {
+            if (!categories.Contains(result))
                 return -1;
-            }
             var index = categories.IndexOf(result);
             return index;
         }

@@ -10,7 +10,7 @@ namespace Castrimaris.Core.Extensions {
         /// <summary>
         /// Returns the value of the enum as a string. The enum fields must be tagged with <see cref="StringValueAttribute"/>.
         /// </summary>
-        public static string AsString(this Enum value) {
+        public static string GetStringValue(this Enum value) {
             Type type = value.GetType();
 
             FieldInfo fieldInfo = type.GetField(value.ToString());

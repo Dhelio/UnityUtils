@@ -1,4 +1,5 @@
 using Castrimaris.Attributes;
+using Castrimaris.Core.Exceptions;
 using Castrimaris.Core.Monitoring;
 using NUnit.Framework;
 using System;
@@ -6,6 +7,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Castrimaris.Core {
 
@@ -24,13 +26,18 @@ namespace Castrimaris.Core {
         [Header("References")]
         [SerializeField] private AudioSource targetAudioSource;
 
-        private ConcurrentQueue<float[]> streamingQ = new ConcurrentQueue<float[]>();
+        private ConcurrentQueue<float> streamingQ = new ConcurrentQueue<float>();
 
         private Coroutine playEnqueueBehaviour = null;
         private bool isStreaming = false;
 
         public bool IsEnabled { get => isEnabled; set => isEnabled = value; }
         public bool Loop { get => targetAudioSource.loop; set => targetAudioSource.loop = value; }
+
+        public void Abort() {
+            targetAudioSource.Stop();
+            streamingQ.Clear();
+        }
 
         public void Enqueue(string base64Audio) {
             if (!isEnabled)
@@ -43,7 +50,8 @@ namespace Castrimaris.Core {
                 var sample = BitConverter.ToInt16(bytes, i * 2);
                 floats[i] = sample / 32768f;
             }
-            streamingQ.Enqueue(floats);
+            foreach (var f in floats)
+                streamingQ.Enqueue(f);
         }
 
         public void Stream() {
@@ -105,7 +113,7 @@ namespace Castrimaris.Core {
                 playEnqueueBehaviour = StartCoroutine(PlayEnqueueBehaviour());
         }
 
-        
+
 
         /// <summary>
         /// Plays a random <see cref="AudioClip"/>.
@@ -142,9 +150,8 @@ namespace Castrimaris.Core {
 
         private void Awake() {
             if (targetAudioSource == null) {
-                if (!TryGetComponent<AudioSource>(out targetAudioSource)) {
-                    throw new MissingReferenceException($"No reference set for {nameof(targetAudioSource)}! Did you forget to assign it in the Editor?");
-                }
+                if (!TryGetComponent<AudioSource>(out targetAudioSource)) 
+                    throw new ReferenceMissingException(nameof(targetAudioSource));
             }
         }
 
@@ -155,18 +162,12 @@ namespace Castrimaris.Core {
             if (!isEnabled)
                 return;
 
-            //TODO make this get the audio right, because right now it skips a lot of stuff and often chunk and audio size don't match
-            if (!streamingQ.TryDequeue(out var audio)) {
-                isStreaming = false;
-                return;
-            }
-
-            for (int i = 0; i < audio.Length; i++) {
-                chunk[i] = audio[i];
-            }
-
-            for (int i = audio.Length-1; i < chunk.Length; i++) {
-                chunk[i] = 0;
+            for (int i = 0; i < chunk.Length; i++) {
+                if (!streamingQ.TryDequeue(out var audioBit)) {
+                    chunk[i] = 0;
+                } else {
+                    chunk[i] = audioBit;
+                }
             }
         }
 

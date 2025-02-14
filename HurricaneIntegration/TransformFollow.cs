@@ -1,8 +1,7 @@
 using Castrimaris.Attributes;
+using Castrimaris.Core.Exceptions;
 using Castrimaris.Core.Extensions;
 using Castrimaris.Core.Monitoring;
-using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace Castrimaris.HurricaneIntegration {
@@ -14,7 +13,11 @@ namespace Castrimaris.HurricaneIntegration {
 
         [Header("References")]
         [SerializeField] private Transform transformReference;
-        
+
+        private void Awake() {
+            if (transformReference == null) throw new ReferenceMissingException(nameof(transformReference));
+        }
+
         private void Update() {
             this.transform.position = transformReference.position;
             this.transform.rotation = transformReference.rotation;

@@ -1,7 +1,9 @@
+using Castrimaris.Core.Exceptions;
 using Castrimaris.IO.GoogleDirections;
 using Castrimaris.IO.OpenAI.Embeddings;
 using OpenAI.Embeddings;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,13 +22,20 @@ namespace Castrimaris.IO.OpenAI {
         [SerializeField] private UnityEvent<DirectionsContainer> onEmbeddingAvailable = new UnityEvent<DirectionsContainer>();
 
         private OpenAIApi api;
+        private CancellationTokenSource cancellationTokenSource;
 
         public UnityEvent<string> OnClosestEmbeddingFound => onCompletionEmbeddingAvailable;
 
+        public void Abort() {
+            cancellationTokenSource.Cancel();
+        }
+
         public async void FindClosestMatch(string input) {
+            cancellationTokenSource = new CancellationTokenSource();
             var request = new EmbeddingsRequest(input);
             var response = await api.Client.EmbeddingsEndpoint.CreateEmbeddingAsync(request);
             var embedding = await embeddings.GetMostRelevantEmbedding(response.Data.First().Embedding.ToArray());
+            if (cancellationTokenSource.IsCancellationRequested) return;
             var instructions = embedding.Instructions;
             var inputWithEmbedding = //TODO make it language agnostic (e.g. italian, english, french, etc.)
                 $"Di seguito vengono elencate delle istruzioni;" +
@@ -41,6 +50,8 @@ namespace Castrimaris.IO.OpenAI {
         }
 
         private void Awake() {
+            if (embeddings == null) throw new ReferenceMissingException(nameof(embeddings));
+
             api = GetComponent<OpenAIApi>();
         }
 

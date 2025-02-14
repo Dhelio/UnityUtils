@@ -9,8 +9,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Castrimaris.Core.Utilities;
 using System.Linq;
-using UnityEngine.UIElements;
-
+using UnityEngine.Networking;
+using Castrimaris.Core.Exceptions;
+using Castrimaris.UI;
 
 
 #if !UNITY_EDITOR && UNITY_ANDROID
@@ -48,7 +49,17 @@ namespace Castrimaris.Management {
             //Sanity Checks
             if (isConnecting)
                 return;
+
             isConnecting = true;
+
+            //Check current version against server version.
+            if (parameters.CheckServerVersion) { 
+                var serverVersionMatches = await CheckServerVersion();
+                if (!serverVersionMatches) { 
+                    //TODO handle version mismatch
+                    return;
+                }
+            }
 
             //Spawn Netcode's Systems.
             if (!parameters.SkipInstantiatingNetworkingSystemsPrefabs)
@@ -69,6 +80,8 @@ namespace Castrimaris.Management {
             //If it's server, start additional systems server-side
             await WaitForNetworkManager(); //We're gonna need the NetworkManager initialized for next steps.
             var isServer = NetworkManager.Singleton.IsServer;
+            if (!isServer)
+                await CheckForSuccessfulConnection();
             if (isServer && !parameters.SkipInstantiatingServerSystemsPrefabs)
                 await SpawnNetworkSystems(parameters.ServerSystemsPrefabs);
         }
@@ -79,11 +92,13 @@ namespace Castrimaris.Management {
         protected override void Awake() {
             base.Awake();
 
-            if (parameters.NetworkingSystemsPrefabs.Length <= 0)
-                Log.W($"Missing references for {nameof(parameters.NetworkingSystemsPrefabs)}! Please, be sure to add it in the Editor!", Use3DDebug: true);
+            //Sanity Checks
+            if (parameters == null) throw new ReferenceMissingException(nameof(parameters));
+            if (parameters.NetworkingSystemsPrefabs.Length <= 0) Log.W($"Missing references for {nameof(parameters.NetworkingSystemsPrefabs)}! Please, be sure to add it in the Editor!");
         }
 
         private async void Start() {
+            InitializeDebugParameters();
             SetupLogLevel();
             await CheckAndroidPermissions();
             ForceClientModeOnAndroidPlatform();
@@ -98,6 +113,42 @@ namespace Castrimaris.Management {
         #endregion
 
         #region PRIVATE METHODS
+
+        private async Task CheckForSuccessfulConnection() {
+            var startingTime = Time.realtimeSinceStartup;
+            var timeoutFlag = false;
+            while (!NetworkManager.Singleton.IsConnectedClient && !timeoutFlag) {
+                await Task.Delay(100);
+                if (Time.realtimeSinceStartup - startingTime > parameters.InitialConnectionTimeout) {
+                    timeoutFlag = true;
+                    UIManager.Instance.DisplayUrgentMessage("<color=red>FATAL ERROR:</color> could not connect to the remote <color=yellow>Server</color>! Please, restart the application.");
+                }
+            }
+        }
+
+        private void InitializeDebugParameters() {
+            if (parameters.ForcePlayerPrefsClear) { 
+                PlayerPrefs.DeleteAll();
+                PlayerPrefs.Save();
+            }
+        }
+
+        private async Task<bool> CheckServerVersion() {
+            var request = UnityWebRequest.Get($"http://{parameters.AwsServerAddress}:8080/metaverse.txt");
+            var result = request.SendWebRequest();
+            while(!result.isDone)
+                await Task.Yield();
+
+
+            switch (request.result) {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.ProtocolError:
+                    return false;
+            }
+
+            return request.downloadHandler.text == "";
+        }
+
         private void InitializeAdditionalSettings() {
             //TODO if platform == Oculus
             OVRPlugin.foveatedRenderingLevel = OVRPlugin.FoveatedRenderingLevel.HighTop;
@@ -140,21 +191,21 @@ namespace Castrimaris.Management {
                 case NetworkModes.SERVER_LOOPBACK:
                 case NetworkModes.SERVER_LOCAL:
                 case NetworkModes.SERVER:
-                    Log.D("Starting as Server", Use3DDebug: true);
+                    Log.D("Starting as Server");
                     NetworkManager.Singleton.StartServer();
                     break;
                 case NetworkModes.CLIENT_LOOPBACK:
                 case NetworkModes.CLIENT_LOCAL:
                 case NetworkModes.CLIENT:
-                    Log.D("Starting as Client", Use3DDebug: true);
+                    Log.D("Starting as Client");
                     NetworkManager.Singleton.StartClient();
                     break;
                 case NetworkModes.HOST:
-                    Log.D("Starting as Host", Use3DDebug: true);
+                    Log.D("Starting as Host");
                     NetworkManager.Singleton.StartHost();
                     break;
                 default:
-                    Log.E("No such Network Mode!", Use3DDebug: true);
+                    Log.E("No such Network Mode!");
                     return;
             }
         }

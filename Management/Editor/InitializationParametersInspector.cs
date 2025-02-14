@@ -2,7 +2,11 @@ using Castrimaris.Core.Extensions;
 using Castrimaris.ScriptableObjects;
 using UnityEditor;
 using System;
-using CastrimarisLayout = Castrimaris.Core.Editor.Layout;
+using UnityEngine.Networking;
+using System.Threading.Tasks;
+
+using Layout = Castrimaris.Core.Editor.Layout;
+using LogLevel = Castrimaris.Core.Monitoring.LogLevel;
 
 namespace Castrimaris.Management {
 
@@ -56,16 +60,25 @@ namespace Castrimaris.Management {
 
             EditorUtility.SetDirty(target);
 
-            CastrimarisLayout.Space(2);
-            CastrimarisLayout.BoldLabelField("Tools");
-            CastrimarisLayout.Button("Autodetect Local IP", AutodetectIP);
-            CastrimarisLayout.Button("Autoset for Release", Autoset, true);
-            CastrimarisLayout.Button("Autoset for Local", Autoset, false);
+            Layout.Space(2);
+            Layout.BoldLabelField("Tools");
+            Layout.Button("Autodetect Local IP", AutodetectIP);
+            Layout.Button("Autoset for Release", code: Autoset, parameter: true);
+            Layout.Button("Autoset for Local", code: Autoset, parameter: false);
+            Layout.Button("Set Server Version to Current", SetVersionOnServer);
         }
 
         #endregion
 
         #region Private Methods
+
+        private async void SetVersionOnServer() {
+            var request = UnityWebRequest.Put($"http://{targetReference.AwsServerAddress}:8080/metaverse.txt", targetReference.Version);
+            request.SetRequestHeader("Content-Type", "text/plain");
+            var response = request.SendWebRequest();
+            while (!response.isDone)
+                await Task.Yield();
+        }
 
         /// <summary>
         /// Checks if there is just one scriptable object of type <see cref="InitializationParameters"/>.
@@ -86,21 +99,24 @@ namespace Castrimaris.Management {
         /// </summary>
         private async void AutodetectIP() {
             var ip = (await new System.Net.Http.HttpClient().GetStringAsync("http://icanhazip.com")).Replace("\\r\\n", "").Replace("\\n", "").Trim();
-            targetReference.SetFieldValue<string>("localServerAddress", ip); //HACK this is kinda hardcoded, if the name changes it breaks.
+            targetReference.SetFieldValue<string>("localServerAddress", ip);
         }
 
         /// <summary>
         /// Sets the parameters for release or debug
         /// </summary>
         private void Autoset(bool isRelease) {
-            targetReference.SetFieldValue<bool>("forceClientConnection", isRelease ? false : true);
             if (isRelease) {
                 targetReference.ForceNetworkMode(InitializationParameters.NetworkModes.SERVER);
+                targetReference.ForceLogLevel(LogLevel.ERROR);
+                targetReference.SetFieldValue<bool>("forceClientConnection", false);
             } else {
                 targetReference.ForceNetworkMode(InitializationParameters.NetworkModes.SERVER_LOCAL);
+                targetReference.ForceLogLevel(LogLevel.DEBUG);
             }
         }
 
         #endregion
     }
 }
+

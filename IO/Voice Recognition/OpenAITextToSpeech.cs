@@ -6,6 +6,7 @@ using OpenAI.Audio;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
@@ -37,6 +38,7 @@ namespace Castrimaris.IO {
         private Dictionary<int, AudioClip> ttsClips = new Dictionary<int, AudioClip>();
         private Coroutine playQueueCoroutine = null;
         private int currentIndex = 0;
+        private CancellationTokenSource cancellationTokenSource;
 
         private const string REGEX_PATTERN = "[.,!?]";
 
@@ -71,7 +73,14 @@ namespace Castrimaris.IO {
 
         public async Task<AudioClip> Generate(string Text) {
             var request = new SpeechRequest(input: Text, voice: voice);
-            var result = await chatGPT.Client.AudioEndpoint.CreateSpeechAsync(request);
+            var result = await chatGPT.Client.AudioEndpoint.CreateSpeechAsync(request, cancellationTokenSource.Token);
+            if (cancellationTokenSource.IsCancellationRequested) {
+                StopCoroutine(playQueueCoroutine);
+                playQueueCoroutine = null;
+                ttsClips.Clear();
+                cancellationTokenSource = new CancellationTokenSource();
+                return null;
+            }
             var clip = result.Item2;
             return clip;
         }
@@ -81,10 +90,16 @@ namespace Castrimaris.IO {
             throw new System.NotImplementedException();
         }
 
+        public void Abort() {
+            cancellationTokenSource.Cancel();
+        }
+
         private void Awake() {
             chatGPT = GetComponent<OpenAIApi>();
             if (speakingPoint == null)
                 speakingPoint = this.gameObject.AddComponent<AudioSource>();
+
+            cancellationTokenSource = new CancellationTokenSource();
         }
 
         //TODO temp remove me please!

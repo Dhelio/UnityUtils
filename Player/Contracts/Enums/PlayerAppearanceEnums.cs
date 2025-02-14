@@ -2,21 +2,24 @@ using Castrimaris.Core;
 
 namespace Castrimaris.Player.Contracts {
 
+    /// <summary>
+    /// Categories for the various customizable parts of the player avatar
+    /// </summary>
     public enum AppearanceCategories {
-        [StringValue("Beard")] Beard = 0,
-        [StringValue("Eyebrows")] Eyebrows,
-        [StringValue("Eyelashes")] Eyelashes,
-        [StringValue("Eyes")] Eyes,
-        [StringValue("Hair")] Hair,
-        [StringValue("Hands")] Hands,
-        [StringValue("Head")] Head,
-        [StringValue("Iris")] Iris,
-        [StringValue("Jacket")] Jacket,
-        [StringValue("Mouth")] Mouth,
-        [StringValue("Nose")] Nose,
-        [StringValue("Pants")] Pants,
-        [StringValue("Shirt")] Shirt,
-        [StringValue("Shoes")] Shoes
+        [StringValue(nameof(Beard))] Beard = 0,
+        [StringValue(nameof(Eyebrows))] Eyebrows,
+        [StringValue(nameof(Eyelashes))] Eyelashes,
+        [StringValue(nameof(Eyes))] Eyes,
+        [StringValue(nameof(Hair))] Hair,
+        [StringValue(nameof(Hands))] Hands,
+        [StringValue(nameof(Head))] Head,
+        [StringValue(nameof(Iris))] Iris,
+        [StringValue(nameof(Jacket))] Jacket,
+        [StringValue(nameof(Mouth))] Mouth,
+        [StringValue(nameof(Nose))] Nose,
+        [StringValue(nameof(Pants))] Pants,
+        [StringValue(nameof(Shirt))] Shirt,
+        [StringValue(nameof(Shoes))] Shoes
     }
 
 }

@@ -6,11 +6,25 @@ using System.Collections.Generic;
 namespace Castrimaris.Core.Utilities {
 
     /// <summary>
-    /// Helper class to export Unity's <see cref="AudioClip"/>s to .wav files.
+    /// Helper class to export Unity's <see cref="AudioClip"/>s to different formats.
     /// </summary>
     public static class AudioClipUtilities {
 
         const int HEADER_SIZE = 44;
+
+        public static string GetPcm16Base64String(AudioClip clip) {
+            var samples = new float[clip.samples * clip.channels];
+            clip.GetData(samples, 0);
+            var pcm16Data = new byte[samples.Length * 2];
+            var offset = 0;
+            for (int i = 0; i < samples.Length; i++) {
+                var pcm16Sample = (short)(Mathf.Clamp(samples[i], -1f, 1f) * short.MaxValue);
+                pcm16Data[offset++] = (byte)(pcm16Sample & 0xFF);
+                pcm16Data[offset++] = (byte)((pcm16Sample >> 8) & 0xFF);
+            }
+
+            return System.Convert.ToBase64String(pcm16Data);
+        }
 
         public static byte[] GetBytesFromClip(AudioClip clip) => Convert(clip);
 

@@ -22,6 +22,10 @@ namespace Castrimaris.ScriptableObjects {
 
         #region PARAMETERS
 
+        [Header("Debug Parameters")]
+        [Tooltip("In Development builds, forces PlayerPrefs clear on start.")]
+        [SerializeField] private bool forcePlayerPrefsClear = false;
+
         [Header("Parameters")]
         [Tooltip("The Network configuration of the machine running the app.\n" +
             "SERVER and SERVER_LOCAL run the application as server mode but with different configurations for the server (as in: listening address, IP, etc)\n" +
@@ -30,6 +34,12 @@ namespace Castrimaris.ScriptableObjects {
         [SerializeField] private NetworkModes networkMode = NetworkModes.SERVER;
         [Tooltip("Connects the clients to the server as soon as the application starts. Useful for debugging purposes.")]
         [SerializeField] private bool forceClientConnection = false;
+        [Tooltip("[EXPERIMENTAL] tries to check the current version with the one on the Server, launching an error if the versions do not match.")]
+        [SerializeField] private bool checkServerVersionOnConnect = false;
+        [ConditionalField(nameof(checkServerVersionOnConnect), true, DisablingTypes.Hidden)]
+        [SerializeField] private string version = "yyyy-mm-dd";
+        [Tooltip("Shows an error if the initial connection attempt isn't successful after this time.")]
+        [SerializeField] private float initialConnectionTimeout = 6.0f;
 
         [Header("AWS Connection Parameters")]
         [Tooltip("Server address used in the SERVER and CLIENT NetworkMode")]
@@ -85,16 +95,19 @@ namespace Castrimaris.ScriptableObjects {
         #endregion
 
         #region PROPERTIES
-
+        public bool ForcePlayerPrefsClear => (Debug.isDebugBuild) ? forcePlayerPrefsClear : false;
         public NetworkModes NetworkMode =>  networkMode;
         public bool AutoConnectClient => forceClientConnection;
+        public bool CheckServerVersion => checkServerVersionOnConnect;
+        public float InitialConnectionTimeout => initialConnectionTimeout;
+        public string Version => version;
         public string AwsServerAddress => awsServerAddress; 
         public ushort AwsServerPort => awsServerPort; 
         public string LocalServerAddress => localServerAddress;
         public ushort LocalServerPort => localServerPort;
         public string LocalHostServerAddress => localHostServerAddress;
         public ushort LocalHostServerPort => localHostServerPort;
-        public Core.Monitoring.LogLevel LogLevel => logLevel;
+        public LogLevel LogLevel => logLevel;
         public List<string> AndroidPermissions => androidPermissions;
         public GameObject[] NetworkingSystemsPrefabs => networkingSystemsPrefabs;
         public GameObject[] VRSystemsPrefabs =>  vrSystemsPrefabs;
@@ -111,6 +124,13 @@ namespace Castrimaris.ScriptableObjects {
         public void ForceNetworkMode(NetworkModes networkMode) {
             Log.D($"Forcing {nameof(networkMode)} {networkMode}");
             this.networkMode = networkMode;
+        }
+
+        public void ForceLogLevel(LogLevel logLevel) {
+            if (!Application.isEditor)
+                return;
+
+            this.logLevel = logLevel;
         }
 
         #endregion

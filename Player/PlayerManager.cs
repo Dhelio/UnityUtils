@@ -1,10 +1,12 @@
 using Assets.Temp; //TODO remove me
 using Castrimaris.Core;
+using Castrimaris.Core.Exceptions;
 using Castrimaris.Core.Monitoring;
 using Castrimaris.Core.Utilities;
-using Castrimaris.IO;
 using Castrimaris.IO.Contracts;
 using Castrimaris.Player.Contracts;
+using Castrimaris.UI;
+using Castrimaris.UI.Contracts;
 using HurricaneVR.Framework.Core;
 using HurricaneVR.Framework.Core.Player;
 using System;
@@ -23,7 +25,6 @@ namespace Castrimaris.Player {
         #region PRIVATE VARIABLES
 
         [Header("References")]
-        [SerializeField] private InterfaceReference<IFader> fader;
         [SerializeField] private InterfaceReference<ITeleporter> teleporter;
         [SerializeField] private InterfaceReference<IPlayerController> controller;
         [SerializeField] private InterfaceReference<IVoiceComms> voiceComms;
@@ -55,8 +56,8 @@ namespace Castrimaris.Player {
             await TeleportToSpawn();
             InitializeVoiceComms();
             appearance.Interface.Load();
-            fader.Interface.FadeOut();
             StartCoroutine(OutOfBoundsBehaviour());
+            UIManager.Singleton.FadeOut();
         }
 
         public override void OnNetworkDespawn() {
@@ -71,16 +72,10 @@ namespace Castrimaris.Player {
             playerName.OnValueChanged += UpdateName;
             NetworkManager.Singleton.SceneManager.OnLoadComplete += TeleportToSpawn;
 
-            if (fader.Interface == null)
-                throw new MissingReferenceException($"No reference set for {nameof(fader)}! Please, add it in the Editor.");
-            if (teleporter.Interface == null)
-                throw new MissingReferenceException($"No reference set for {nameof(teleporter)}! Please, add it in the Editor.");
-            if (controller.Interface == null)
-                throw new MissingReferenceException($"No reference set for {nameof(controller)}! Please, add it in the Editor.");
-            if (voiceComms.Interface == null)
-                throw new MissingReferenceException($"No reference set for {nameof(voiceComms)}! Please, add it in the Editor.");
-            if (appearance.Interface == null)
-                throw new MissingReferenceException($"No reference set for {nameof(appearance)}! Please, add it in the Editor.");
+            if (teleporter.Interface == null) throw new ReferenceMissingException(nameof(teleporter));
+            if (controller.Interface == null) throw new ReferenceMissingException(nameof(controller));
+            if (voiceComms.Interface == null) throw new ReferenceMissingException(nameof(voiceComms));
+            if (appearance.Interface == null) throw new ReferenceMissingException(nameof(appearance));
         }
 
         #endregion

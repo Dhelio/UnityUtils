@@ -16,21 +16,14 @@ namespace Castrimaris.Player {
     /// </summary>
     public class PlayerAppearance : MonoBehaviour, IPlayerAppearance {
 
+        #region Private Variables
+
         [Header("References")]
         [SerializeField] private List<PlayerAppearanceData> data;
 
-        private void Reset() {
-            RetrieveReferences();
-        }
+        #endregion
 
-        private void Awake() {
-            if (data == null)
-                throw new System.NullReferenceException($"No reference found for {nameof(PlayerAppearanceData)}! Add it in the Editor.");
-        }
-
-        private async void Start() {
-            await AddressablesUtilities.InitializeAsync();
-        }
+        #region Public Methods
 
         [ExposeInInspector]
         public async void Load() {
@@ -56,7 +49,7 @@ namespace Castrimaris.Player {
         }
 
         [ExposeInInspector]
-        public void Set(AppearanceCategories category, string value) => Set(category.AsString(), value);
+        public void Set(AppearanceCategories category, string value) => Set(category.GetStringValue(), value);
 
         public async void Set(string category, string value) {
             //Sanity check
@@ -66,7 +59,7 @@ namespace Castrimaris.Player {
             }
 
             //Get current skinnedmesh in children
-            var oldPlayerAppearanceData = (from d in data where d.Category.AsString() == category select d).FirstOrDefault();
+            var oldPlayerAppearanceData = (from d in data where d.Category.GetStringValue() == category select d).FirstOrDefault();
             var oldSkinnedMeshRenderer = oldPlayerAppearanceData.GetComponent<SkinnedMeshRenderer>();
 
             //If the request is null, just null the mesh and the value
@@ -117,8 +110,31 @@ namespace Castrimaris.Player {
             Destroy(newSkinnedMeshRendererContainer.gameObject);
         }
 
+        #endregion
+
+        #region Unity Overrides
+
+        private void Reset() {
+            RetrieveReferences();
+        }
+
+        private void Awake() {
+            if (data == null)
+                throw new System.NullReferenceException($"No reference found for {nameof(PlayerAppearanceData)}! Add it in the Editor.");
+        }
+
+        private async void Start() {
+            await AddressablesUtilities.InitializeAsync();
+        }
+
+        #endregion
+
+        #region Editor Tools
+
         [ContextMenu("Retrieve References")]
         private void RetrieveReferences() => data = GetComponentsInChildren<PlayerAppearanceData>().ToList();
+
+        #endregion
 
     }
 } 

@@ -1,4 +1,5 @@
 using Castrimaris.Attributes;
+using Castrimaris.Core.Exceptions;
 using Castrimaris.Core.Extensions;
 using Castrimaris.Core.Monitoring;
 using Castrimaris.Player;
@@ -45,8 +46,8 @@ namespace Castrimaris.Interactables {
         #region Unity Overrides
 
         private void Awake() {
-            if (connectedTeleporter == null)
-                throw new MissingReferenceException($"No reference set for {nameof(connectedTeleporter)}. Did you forget to set it in the Editor?");
+            //Sanity checks
+            if (connectedTeleporter == null) throw new ReferenceMissingException(nameof(connectedTeleporter));
             if (connectedTeleporter == this)
                 throw new System.InvalidOperationException($"{nameof(connectedTeleporter)} reference can't be itself! Assign another {typeof(Teleporter)} to this reference!");
 

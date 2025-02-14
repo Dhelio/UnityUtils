@@ -1,4 +1,4 @@
-using Castrimaris.Player.Contracts;
+using Castrimaris.UI.Contracts;
 using HurricaneVR.Framework.Core.Player;
 using UnityEngine;
 

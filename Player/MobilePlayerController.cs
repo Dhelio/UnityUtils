@@ -4,6 +4,7 @@ using Castrimaris.InputActions;
 using Castrimaris.Interactables;
 using Castrimaris.Interactables.Contracts;
 using Castrimaris.IO.Contracts;
+using Castrimaris.UI;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -92,6 +93,7 @@ namespace Castrimaris.Player {
         private void Start() {
             eventSystem = FindObjectOfType<EventSystem>();
             uiGraphicRaycaster = FindObjectOfType<GraphicRaycaster>();
+            UIManager.Instance.FadeOut();
         }
 
         private void OnEnable() {

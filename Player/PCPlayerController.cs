@@ -1,10 +1,12 @@
 using Castrimaris.Animations.Contracts;
 using Castrimaris.Attributes;
 using Castrimaris.Core;
+using Castrimaris.Core.Exceptions;
 using Castrimaris.Core.Monitoring;
 using Castrimaris.InputActions;
 using Castrimaris.Interactables;
 using Castrimaris.Interactables.Contracts;
+using Castrimaris.UI;
 using System.Linq;
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
@@ -73,15 +75,19 @@ namespace Castrimaris.Player {
 
         #region Unity Overrides
         private void Awake() {
+            //Sanity Checks
+            if (animator == null) throw new ReferenceMissingException(nameof(animator));
+            if (teleporter == null) throw new ReferenceMissingException(nameof(teleporter));
+            if (interactorTransform == null) throw new ReferenceMissingException(nameof(interactorTransform));
+
+            //Initialization
             playerActions = new PlayerActions();
             camera = GetComponentInChildren<Camera>();
             characterController = GetComponent<CharacterController>();
+        }
 
-            if (animator.Interface == null)
-                throw new MissingReferenceException($"No reference set for interface {nameof(animator)}! Please assign it in the Editor.");
-
-            if (teleporter.Interface == null)
-                throw new MissingReferenceException($"No reference set for interface {nameof(teleporter)}! Please assign it in the Editor.");
+        private void Start() {
+            UIManager.Instance.FadeOut();
         }
 
         private void Update() {

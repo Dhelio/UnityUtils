@@ -12,16 +12,16 @@ namespace Castrimaris.Math {
         /// <summary>
         /// Takes the distance on the spline and wraps it on the spline by "looping" the spline if necessary
         /// </summary>
-        /// <param name="DistanceOnTheSpline">The distance</param>
-        private void WrapSplineDistance(ref float DistanceOnTheSpline) {
-            if (DistanceOnTheSpline > Length) {
+        /// <param name="distanceOnTheSpline">The distance</param>
+        private void WrapSplineDistance(ref float distanceOnTheSpline) {
+            if (distanceOnTheSpline > Length) {
                 do {
-                    DistanceOnTheSpline -= Length;
-                } while (DistanceOnTheSpline > Length);
-            } else if (DistanceOnTheSpline < 0) {
+                    distanceOnTheSpline -= Length;
+                } while (distanceOnTheSpline > Length);
+            } else if (distanceOnTheSpline < 0) {
                 do {
-                    DistanceOnTheSpline += Length;
-                } while (DistanceOnTheSpline < 0);
+                    distanceOnTheSpline += Length;
+                } while (distanceOnTheSpline < 0);
             }
         }
 
@@ -29,38 +29,38 @@ namespace Castrimaris.Math {
 
         #region PUBLIC METHODS
 
-        public Vector3 GetLocalPosition(float DistanceOnTheSpline) {
+        public Vector3 GetLocalPosition(float distanceOnTheSpline) {
             Vector3 position = Vector3.positiveInfinity;
 
             if (IsLoop)
-                WrapSplineDistance(ref DistanceOnTheSpline);
+                WrapSplineDistance(ref distanceOnTheSpline);
 
-            CurveSample sample = GetSampleAtDistance(DistanceOnTheSpline);
+            CurveSample sample = GetSampleAtDistance(distanceOnTheSpline);
             position = sample.location;
 
             return position;
         }
 
-        public Quaternion GetLocalRotation(float DistanceOnTheSpline) {
+        public Quaternion GetLocalRotation(float distanceOnTheSpline) {
             Quaternion rotation = Quaternion.identity;
 
             if (IsLoop)
-                WrapSplineDistance(ref DistanceOnTheSpline);
+                WrapSplineDistance(ref distanceOnTheSpline);
 
-            CurveSample sample = GetSampleAtDistance(DistanceOnTheSpline);
+            CurveSample sample = GetSampleAtDistance(distanceOnTheSpline);
             rotation = sample.Rotation;
 
             return rotation;
         }
 
-        public (Vector3, Quaternion) GetLocalPositionAndRotation(float DistanceOnTheSpline) {
+        public (Vector3, Quaternion) GetLocalPositionAndRotation(float distanceOnTheSpline) {
             Vector3 position = Vector3.positiveInfinity;
             Quaternion rotation = Quaternion.identity;
 
             if (IsLoop)
-                WrapSplineDistance(ref DistanceOnTheSpline);
+                WrapSplineDistance(ref distanceOnTheSpline);
 
-            CurveSample sample = GetSampleAtDistance(DistanceOnTheSpline);
+            CurveSample sample = GetSampleAtDistance(distanceOnTheSpline);
             position = sample.location;
             rotation = sample.Rotation;
 
@@ -71,30 +71,30 @@ namespace Castrimaris.Math {
             return Length;
         }
 
-        public Vector3 GetWorldPosition(float DistanceOnTheSpline) {
+        public Vector3 GetWorldPosition(float distanceOnTheSpline) {
             Vector3 position = Vector3.positiveInfinity;
 
             if (IsLoop)
-                WrapSplineDistance(ref DistanceOnTheSpline);
+                WrapSplineDistance(ref distanceOnTheSpline);
 
-            CurveSample sample = GetSampleAtDistance(DistanceOnTheSpline);
+            CurveSample sample = GetSampleAtDistance(distanceOnTheSpline);
             position = this.transform.TransformPoint(sample.location);
 
             return position;
         }
 
-        public Quaternion GetWorldRotation(float DistanceOnTheSpline) {
-            return GetLocalRotation(DistanceOnTheSpline);
+        public Quaternion GetWorldRotation(float distanceOnTheSpline) {
+            return GetLocalRotation(distanceOnTheSpline);
         }
 
-        public (Vector3, Quaternion) GetWorldPositionAndRotation(float DistanceOnTheSpline) {
+        public (Vector3, Quaternion) GetWorldPositionAndRotation(float distanceOnTheSpline) {
             Vector3 position = Vector3.positiveInfinity;
             Quaternion rotation = Quaternion.identity;
 
             if (IsLoop)
-                WrapSplineDistance(ref DistanceOnTheSpline);
+                WrapSplineDistance(ref distanceOnTheSpline);
 
-            CurveSample sample = GetSampleAtDistance(DistanceOnTheSpline);
+            CurveSample sample = GetSampleAtDistance(distanceOnTheSpline);
             position = this.transform.TransformPoint(sample.location);
             rotation = sample.Rotation;
 

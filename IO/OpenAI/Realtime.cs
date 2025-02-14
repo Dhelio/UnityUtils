@@ -5,15 +5,13 @@ using Castrimaris.ScriptableObjects;
 using UnityEngine.Events;
 using UnityEngine;
 using Castrimaris.Core.Monitoring;
-using System;
 using System.Threading.Tasks;
 using Castrimaris.Core.Extensions;
-using Castrimaris.Core.Utilities;
 using Newtonsoft.Json;
 using Castrimaris.Network;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Linq;
+using Castrimaris.Core.Exceptions;
 
 namespace Castrimaris.IO {
 
@@ -58,7 +56,7 @@ namespace Castrimaris.IO {
         private int eventIdIndex = 0;
         private ManagedWebSocket socket;
 
-        private Queue<string> incomingAudio = new Queue<string>();
+        private readonly Queue<string> incomingAudio = new();
 
         #endregion
 
@@ -72,7 +70,7 @@ namespace Castrimaris.IO {
 
         [ExposeInInspector]
         public async Task Initialize() {
-            socket = new ManagedWebSocket(realtimeEndpoint, new System.Collections.Generic.Dictionary<string, string>() {
+            socket = new ManagedWebSocket(realtimeEndpoint, new Dictionary<string, string>() {
                 { "Authorization",$"Bearer {apiKey.Key}" },
                 { "OpenAI-Beta", "realtime=v1" }
             });
@@ -92,8 +90,8 @@ namespace Castrimaris.IO {
 
         public async void OnOpen() {
             await UpdateSession();
-            await CreateConversationItem("Come ti chiami?");
-            await RequestResponse();
+            //await CreateConversationItem("Come ti chiami?"); //For testing only!
+            //await RequestResponse();
         }
 
         public void OnClose() {
@@ -110,10 +108,40 @@ namespace Castrimaris.IO {
                 case "session.updated":
                     Log.D($"Server: {typeValue}.");
                     break;
+                case "conversation.created":
+                    Log.D($"Server: {typeValue}.");
+                    break;
                 case "conversation.item.created":
                     Log.D($"Server: {typeValue}.");
                     break;
+                case "conversation.item.input_audio_transcription.completed":
+                    Log.D($"Server: {typeValue} -> {json.Value<string>("transcript")}");
+                    break;
+                case "conversation.item.input_audio_transcription.failed":
+                    Log.D($"Server: {typeValue}.");
+                    break;
+                case "conversation.item.truncated":
+                    Log.D($"Server: {typeValue}.");
+                    break;
+                case "conversation.item.deleted":
+                    Log.D($"Server: {typeValue}.");
+                    break;
+                case "input_audio_buffer.committed":
+                    Log.D($"Server: {typeValue}.");
+                    break;
+                case "input_audio_buffer.cleared":
+                    Log.D($"Server: {typeValue}.");
+                    break;
+                case "input_audio_buffer.speech_started":
+                    Log.D($"Server: {typeValue}.");
+                    break;
+                case "input_audio_buffer.speech_stopped":
+                    Log.D($"Server: {typeValue}.");
+                    break;
                 case "response.created":
+                    Log.D($"Server: {typeValue}.");
+                    break;
+                case "response.done":
                     Log.D($"Server: {typeValue}.");
                     break;
                 case "rate_limits.updated":
@@ -123,30 +151,19 @@ namespace Castrimaris.IO {
                     Log.D($"Server: {typeValue}.");
                     break;
                 case "response.audio.delta":
-                    Log.D("Received audio delta.");
+                    //Log.D($"Server: {typeValue}.");
                     var base64Response = json.Value<string>("delta");
                     ThreadDispatcher.Instance.DispatchOnMainThread(() => onPartialBase64Response.Invoke(base64Response));
-                    //incomingAudio.Enqueue(json.Value<string>("delta"));
-                    //ThreadDispatcher.Instance.DispatchOnMainThread( () => {
-                    //    var deltaBase64 = json.Value<string>("delta");
-                    //    var clip = deltaBase64.GetAudioClip();
-                    //    onPartialResponse.Invoke(clip);
-                    //});
                     break;
-                case "response.done":
-                    //var base64Audio = string.Join("", incomingAudio);
-                    //incomingAudio.Clear();
-                    //ThreadDispatcher.Instance.DispatchOnMainThread(() => {
-                    //    var clip = base64Audio.GetAudioClip();
-                    //    onResponse.Invoke(clip);
-                    //});
+                case "response.text.done":
+                    Log.D($"Server: {typeValue} -> {json.Value<string>("text")}.");
+                    break;
+                case "response.audio_transcript.done":
+                    Log.D($"Server: {typeValue} -> {json.Value<string>("transcript")}.");
                     break;
                 default:
                     break;
             }
-
-            //var clip = message.GetAudioClip();
-            //onResponse?.Invoke(clip);
         }
 
         public void OnPartialMessage(string message) {
@@ -169,15 +186,11 @@ namespace Castrimaris.IO {
         protected override async void Awake() {
             base.Awake();
 
-            if (apiKey == null) {
-                Log.E($"No API key set for {nameof(Realtime)}! Please, assign one in the Editor.");
-                return;
-            }
+            //Sanity checks
+            if (apiKey == null) throw new ReferenceMissingException(nameof(apiKey));
+            if (configuration == null) throw new ReferenceMissingException(nameof(configuration));
 
-            if (configuration == null) {
-                Log.E($"No configuration set for {nameof(Realtime)}! Please, assign one in the Editor.");
-            }
-
+            //Initialization
             if (initializationType == InitializationTypes.OnAwake)
                 await Initialize();
         }
@@ -214,6 +227,9 @@ namespace Castrimaris.IO {
             await socket.Send(request);
         }
 
+        /// <summary>
+        /// Updates current assistant session with current settings.
+        /// </summary>
         private async Task UpdateSession() {
             var jsonUpdateSessionRequest = new {
                 event_id = eventId,
@@ -221,9 +237,9 @@ namespace Castrimaris.IO {
                 session = new {
                     modalities = (realtimeMode == OpenAIRealtimeModes.Text_And_Audio) ? new[] { "text", "audio" } : new[] { "text" } , 
                     instructions = configuration.MessagesString,
-                    voice = voice.AsString(),
-                    input_audio_format = inputAudioFormat.AsString(),
-                    output_audio_format = outputAudioFormat.AsString(),
+                    voice = voice.GetStringValue(),
+                    input_audio_format = inputAudioFormat.GetStringValue(),
+                    output_audio_format = outputAudioFormat.GetStringValue(),
                     input_audio_transcription = new { model = "whisper-1" }, //TODO this can maybe be null because the RT model works also with just audio.
                     turn_detection = (voiceActivationDetection == OpenAIVAD.None) ? null : new {
                         type = "server_vad",
@@ -238,6 +254,9 @@ namespace Castrimaris.IO {
             await socket.Send(request);
         }
 
+        /// <summary>
+        /// Requests a response from previous appended Audio or text. Doesn't need to be called if the server is in VAD mode.
+        /// </summary>
         private async Task RequestResponse() {
             var jsonRequestResponse = new {
                 event_id = eventId,
@@ -248,10 +267,12 @@ namespace Castrimaris.IO {
             await socket.Send(request);
         }
 
+        /// <summary>
+        /// Appends audio to the buffer
+        /// </summary>
         private async Task AppendAudio(AudioClip clip) {
             Log.D($"Trying to append audio");
-            var clipBytes = AudioClipUtilities.GetBytesFromClip(clip);
-            var clipBase64 = Convert.ToBase64String(clipBytes);
+            var clipBase64 = clip.GetBase64();
 
             var jsonAppendAudioRequest = new {
                 event_id = eventId,
@@ -264,6 +285,9 @@ namespace Castrimaris.IO {
             await socket.Send(request);
         }
 
+        /// <summary>
+        /// Clears appended audio in the buffer
+        /// </summary>
         private async Task ClearAudio() {
             Log.D($"Requesting audio clear.");
             var jsonClearAudioRequest = new {
@@ -274,6 +298,9 @@ namespace Castrimaris.IO {
             await socket.Send(request);
         }
 
+        /// <summary>
+        /// Commits previously appended audio to the buffer
+        /// </summary>
         private async Task CommitAudio() { //No need if the server goes into VAD mode
             Log.D($"Requesting audio commit.");
             var jsonCommitAudioRequest = new {

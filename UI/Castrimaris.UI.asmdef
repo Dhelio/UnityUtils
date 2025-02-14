@@ -1,0 +1,20 @@
+{
+    "name": "Castrimaris.UI",
+    "rootNamespace": "Castrimaris.UI",
+    "references": [
+        "Unity.TextMeshPro",
+        "DOTweenPro.Scripts",
+        "Castrimaris.Core",
+        "Castrimaris.UI.Contracts",
+        "DOTween.Modules"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

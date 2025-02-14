@@ -266,6 +266,7 @@ namespace Castrimaris.Interactables.Drawing {
                 boardColor.SetAsActiveColor();
                 return;
             }
+
             //Swap size
             if (collider.TryGetComponent<BoardSize>(out var boardSize)) {
                 Log.D($"Entered collision with {nameof(BoardSize)}");

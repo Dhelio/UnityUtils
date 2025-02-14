@@ -78,7 +78,7 @@ namespace Castrimaris.ScriptableObjects {
             //Determine which is which, because at runtime it can't be determined.
             var directionalMaps = (from texture in textures
                                    where texture.name.EndsWith("comp_dir")
-                                   select texture).OrderBy(texture => texture.name).ToArray();
+                                   select texture).OrderBy(texture => texture.name, new AlphanumericComparer()).ToArray();
             var colorMaps = (from texture in textures
                              where texture.name.EndsWith("comp_light")
                              select texture).OrderBy(texture => texture.name, new AlphanumericComparer()).ToArray();
@@ -94,7 +94,6 @@ namespace Castrimaris.ScriptableObjects {
 
             //Apply lightmap settings
             LightmapSettings.lightmaps = lightmapData;
-            
         }
 
         public void LoadLightProbes() {

@@ -157,7 +157,7 @@ namespace Castrimaris.Utilities {
             var path = FindProjectModelToSpriteFolderPath();
             var fileName = $"{ ((useObjectName) ? FileName : fileNamePrepend) }";
             var appendName = (appendFilesCount) ? $"_{filesCount}" : "";
-            var extensionName = encodingType.AsString();
+            var extensionName = encodingType.GetStringValue();
             var filePath = $"{path}/{fileName}{appendName}{extensionName}";
             File.WriteAllBytes(filePath, ScreenShot);
 

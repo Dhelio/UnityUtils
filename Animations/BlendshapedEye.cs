@@ -1,5 +1,6 @@
 using Castrimaris.Attributes;
 using Castrimaris.Core;
+using Castrimaris.Core.Exceptions;
 using Castrimaris.Core.Extensions;
 using UnityEngine;
 
@@ -50,8 +51,7 @@ namespace Castrimaris.Animations {
         public Transform Target { set => target = value; }
 
         private void Awake() {
-            if (eye == null)
-                throw new MissingReferenceException($"No reference set for eye! Did you forget to assign it in the Editor?");
+            if (eye == null) throw new ReferenceMissingException(nameof(eye));
 
             var sharedMesh = eye.sharedMesh;
             lookRightBlendshapeIndex = sharedMesh.GetBlendShapeIndex(lookRightBlendshapeName);

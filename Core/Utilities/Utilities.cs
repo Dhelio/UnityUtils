@@ -1,5 +1,9 @@
 using UnityEngine;
 using UnityEngine.XR.Management;
+using NUnit.Framework;
+using System.Collections.Generic;
+
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -15,6 +19,30 @@ namespace Castrimaris.Core.Utilities {
 
         private static bool? isVrPlatform = null; //Cached value to make checks for VR platforms faster
 
+        /// <summary>
+        /// Retrieves all interfaces of a certain type. Might work also with common types.
+        /// </summary>
+        /// <typeparam name="T">The interface</typeparam>
+        /// <returns>a list of interfaces of the requested type. If no types are found then the list will be empty.</returns>
+        public static List<T> FindInterfacesOfType<T>() where T : class {
+            var result = new List<T>();
+            var gameObjects = GameObject.FindObjectsOfType<GameObject>();
+            foreach (var gameObject in gameObjects) {
+                var components = gameObject.GetComponents<MonoBehaviour>();
+                foreach (var component in components) {
+                    if (component == null) continue; //Skip missing or invalid components
+                    if (component is T) {
+                        result.Add(component as T);
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the running platform on Android OS. In Editor calls <see cref="GetEditorPlatform"/> instead.
+        /// </summary>
+        /// <returns></returns>
         public static RuntimePlatformTypes GetAndroidPlatform() {
             if (Application.isEditor)
                 return GetEditorPlatform();

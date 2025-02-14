@@ -14,7 +14,19 @@ namespace Castrimaris.Core {
         
         private static T instance = null;
 
+        /// <summary>
+        /// The static instance of this singleton pattern. Same as calling Singleton.
+        /// </summary>
         public static T Instance { get { return instance; } }
+
+        /// <summary>
+        /// The static instance of this singleton pattern. Same as calling Instance.
+        /// </summary>
+        public static T Singleton => Instance;
+
+        /// <summary>
+        /// Wheter this singleton has been instanced or not.
+        /// </summary>
         public static bool IsInstanced { get { return instance != null; } }
 
         protected virtual void Awake() {

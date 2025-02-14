@@ -41,7 +41,7 @@ namespace Castrimaris.IO.GoogleDirections {
 
         public Task<string> Build(string key) {
             var departureTime = (this.departureTime < DateTime.Now) ? "now" : ((DateTimeOffset)this.departureTime).ToUnixTimeSeconds().ToString();
-            return Task.FromResult($"{BASE_REQUEST}key={key}&origin={origin}&destination={destination}&mode={transitMode.AsString()}&language={language.AsString()}&departure_time={departureTime}");
+            return Task.FromResult($"{BASE_REQUEST}key={key}&origin={origin}&destination={destination}&mode={transitMode.GetStringValue()}&language={language.GetStringValue()}&departure_time={departureTime}");
         }
 
         #endregion Public Methods

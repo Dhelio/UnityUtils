@@ -104,7 +104,7 @@ namespace Castrimaris.IO {
             if (!isInitialized)
                 return;
 
-            var _ = await voiceProfileClient.GetActivationPhrasesAsync(VoiceProfileType.TextIndependentVerification, region.AsString());
+            var _ = await voiceProfileClient.GetActivationPhrasesAsync(VoiceProfileType.TextIndependentVerification, region.GetStringValue());
             var audioConfig = AudioConfig.FromStreamInput(new AudioClipInputStreamCallback(clip));
             var enrollmentResult = await voiceProfileClient.EnrollProfileAsync(voiceProfile, audioConfig);
             if (enrollmentResult.RemainingEnrollmentsSpeechLength > TimeSpan.Zero) { 
@@ -139,12 +139,12 @@ namespace Castrimaris.IO {
 
             var enrollmentId = $"{Prefixes.Rand()} {Suffixes.Rand()}";
 
-            Log.D($"Initializing with key {apiKey.Key}, region {region.AsString()}, id {enrollmentId}");
+            Log.D($"Initializing with key {apiKey.Key}, region {region.GetStringValue()}, id {enrollmentId}");
 
-            config = SpeechConfig.FromSubscription(apiKey.Key, region.AsString());
+            config = SpeechConfig.FromSubscription(apiKey.Key, region.GetStringValue());
             this.enrollmentId = enrollmentId;
             voiceProfileClient = new VoiceProfileClient(config);
-            voiceProfile = await voiceProfileClient.CreateProfileAsync(VoiceProfileType.TextIndependentVerification, region.AsString());
+            voiceProfile = await voiceProfileClient.CreateProfileAsync(VoiceProfileType.TextIndependentVerification, region.GetStringValue());
 
             isInitialized = true;
 

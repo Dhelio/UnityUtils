@@ -1,5 +1,6 @@
 using Castrimaris.Core;
 using Castrimaris.Core.Collections;
+using Castrimaris.Core.Exceptions;
 using Castrimaris.Core.Utilities;
 using UnityEngine;
 
@@ -16,17 +17,13 @@ namespace Castrimaris.Player {
 
         public GameObject GetPlayerPrefab() {
             var runtimePlatform = Utilities.GetRuntimePlatform();
-            if (!playerPrefabs.TryGetValue(runtimePlatform, out var playerPrefab)) {
-                throw new MissingReferenceException($"Tried to retrieve Player Prefab for platform {runtimePlatform}, but none has been found! Did you forget to define it in the Editor?");
-            }
+            if (!playerPrefabs.TryGetValue(runtimePlatform, out var playerPrefab)) throw new ReferenceMissingException(nameof(runtimePlatform)+" "+nameof(playerPrefab));
 
             return playerPrefab;
         }
 
         public GameObject GetPlayerPrefab(RuntimePlatformTypes runtimePlatform) {
-            if (!playerPrefabs.TryGetValue(runtimePlatform, out var playerPrefab)) {
-                throw new MissingReferenceException($"Tried to retrieve Player Prefab for platform {runtimePlatform}, but none has been found! Did you forget to define it in the Editor?");
-            }
+            if (!playerPrefabs.TryGetValue(runtimePlatform, out var playerPrefab)) throw new ReferenceMissingException(nameof(runtimePlatform) + " " + nameof(playerPrefab));
 
             return playerPrefab;
         }

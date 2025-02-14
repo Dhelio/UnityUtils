@@ -16,7 +16,7 @@ namespace Castrimaris.Player {
         [SerializeField] private string value;
 
         public AppearanceCategories Category { get => category; set => category = value; }
-        public string CategoryName => category.AsString();
+        public string CategoryName => category.GetStringValue();
         public string Value { get => value; set => this.value = value; }
 
         private void Reset() {
@@ -26,7 +26,7 @@ namespace Castrimaris.Player {
             var result = AppearanceCategories.Jacket;
             foreach (var category in categories) {
                 var tmp = (AppearanceCategories)category;
-                var distance = tmp.AsString().LevenshteinDistance(this.gameObject.name);
+                var distance = tmp.GetStringValue().LevenshteinDistance(this.gameObject.name);
                 if (distance < shortest) {
                     shortest = distance;
                     result = tmp;

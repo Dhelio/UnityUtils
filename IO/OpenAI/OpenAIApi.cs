@@ -1,6 +1,5 @@
-using Castrimaris.Attributes;
 using Castrimaris.Core;
-using Castrimaris.Core.Monitoring;
+using Castrimaris.Core.Exceptions;
 using Castrimaris.ScriptableObjects;
 using OpenAI;
 using UnityEngine;
@@ -24,10 +23,7 @@ namespace Castrimaris.IO {
         protected override void Awake() {
             base.Awake();
 
-            if (apiKey == null) {
-                Log.E($"No API key set for {nameof(OpenAIClient)}! Did you forget to assign it in the editor");
-                return;
-            }
+            if (apiKey == null) throw new ReferenceMissingException(nameof(apiKey));
 
             client = new OpenAIClient(apiKey.Key);
         }

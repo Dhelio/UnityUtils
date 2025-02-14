@@ -1,4 +1,5 @@
-using Castrimaris.Player.Contracts;
+using Castrimaris.UI;
+using Castrimaris.UI.Contracts;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -9,12 +10,13 @@ namespace Castrimaris.Management {
 
         private bool isConnecting = false;
 
+        public void FadeIn() => UIManager.Instance.FadeIn();
+
         public void ConnectAfter(float Seconds) {
             if (isConnecting)
                 return;
+
             isConnecting = true;
-            var fader = FindObjectsOfType<MonoBehaviour>().OfType<IFader>().First();
-            fader.FadeIn();
             StartCoroutine(ConnectAfterBehaviour(Seconds));
         }
 

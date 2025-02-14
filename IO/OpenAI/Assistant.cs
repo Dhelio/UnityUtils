@@ -1,4 +1,5 @@
 using Castrimaris.Attributes;
+using Castrimaris.Core.Exceptions;
 using Castrimaris.Core.Monitoring;
 using Castrimaris.IO.Contracts;
 using Castrimaris.ScriptableObjects;
@@ -7,6 +8,7 @@ using OpenAI;
 using OpenAI.Assistants;
 using OpenAI.Threads;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
@@ -41,6 +43,7 @@ namespace Castrimaris.IO.OpenAI {
         private ThreadResponse thread;
         private AssistantResponse assistant;
         private volatile int partialResultIndex = 0;
+        private CancellationTokenSource cancellationTokenSource;
 
         #endregion
 
@@ -55,10 +58,15 @@ namespace Castrimaris.IO.OpenAI {
         #region Public Methods
 
         public void Ask(string Text) {
+            cancellationTokenSource = new CancellationTokenSource();
             isThinking = true;
             onRequest.Invoke();
             var message = new Message(Text, Role.User);
             SendThreadMessage(message);
+        }
+
+        public void Abort() {
+            cancellationTokenSource.Cancel();
         }
 
         #endregion
@@ -68,8 +76,7 @@ namespace Castrimaris.IO.OpenAI {
         private async void Awake() {
             apis = GetComponent<OpenAIApi>();
 
-            if (assistantKey == null)
-                throw new MissingReferenceException($"No reference set for {nameof(assistantKey)}! Please, set it in the Editor.");
+            if (assistantKey == null) throw new ReferenceMissingException(nameof(assistantKey));
 
             thread = await apis.Client.ThreadsEndpoint.CreateThreadAsync();
             assistant = await apis.Client.AssistantsEndpoint.RetrieveAssistantAsync(assistantKey.Key);
@@ -81,6 +88,7 @@ namespace Castrimaris.IO.OpenAI {
 
         private async void SendThreadMessage(Message message) {
             var messageCreationResponse = await apis.Client.ThreadsEndpoint.CreateMessageAsync(thread.Id, message);
+            if (cancellationTokenSource.IsCancellationRequested) return;
             var threadRun = await thread.CreateRunAsync(assistant, ThreadRunHandler);
             isThinking = false;
             partialResultIndex = 0;

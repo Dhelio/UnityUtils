@@ -1,4 +1,5 @@
 using Castrimaris.Attributes;
+using Castrimaris.Core.Exceptions;
 using Castrimaris.Core.Extensions;
 using Castrimaris.Core.Monitoring;
 using Castrimaris.IO.Contracts;
@@ -6,6 +7,7 @@ using Castrimaris.IO.ScriptableObjects;
 using OpenAI;
 using OpenAI.Chat;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -41,6 +43,7 @@ namespace Castrimaris.IO.OpenAI {
         private List<Message> chatHistory = new List<Message>();
         private OpenAIApi apis;
         private List<Tool> tools;
+        private CancellationTokenSource cancellationTokenSource;
 
         #endregion
 
@@ -68,6 +71,8 @@ namespace Castrimaris.IO.OpenAI {
 
         #endregion
 
+        #region Public Methods
+
         /// <summary>
         /// Asks something to the AI Assistant
         /// </summary>
@@ -76,11 +81,22 @@ namespace Castrimaris.IO.OpenAI {
             isThinking = true;
             Log.D($"Asking to Completion: {input}");
             chatHistory.Add(new Message(Role.User, input));
-            var chatRequest = new ChatRequest(messages: chatHistory, model: chatRequestModel.AsString(), tools: tools);
+            var chatRequest = new ChatRequest(messages: chatHistory, model: chatRequestModel.GetStringValue(), tools: tools);
             SendChatRequest(chatRequest);
         }
 
+        public void Abort() {
+            cancellationTokenSource.Cancel();
+            isThinking = false;
+        }
+
+        #endregion
+
+        #region Unity Overrides
+
         private void Awake() {
+            if (configuration == null) throw new ReferenceMissingException(nameof(configuration));
+
             apis = GetComponent<OpenAIApi>();
 
             tools = (useTools) ? GetComponents<ITool>().ToToolsList() : null;
@@ -89,10 +105,15 @@ namespace Castrimaris.IO.OpenAI {
             chatHistory.AddRange(configuration.Messages);
         }
 
+        #endregion
+
+        #region Private Methods
+
         private async void SendChatRequest(ChatRequest request) {
             Log.D($"Sending request...");
             onChatRequest.Invoke();
-            var response = (usePartialResults) ? await apis.Client.ChatEndpoint.StreamCompletionAsync(request, PartialResultHandler) : await apis.Client.ChatEndpoint.GetCompletionAsync(request);
+            var response = (usePartialResults) ? await apis.Client.ChatEndpoint.StreamCompletionAsync(request, PartialResultHandler, false, cancellationTokenSource.Token) : await apis.Client.ChatEndpoint.GetCompletionAsync(request, cancellationTokenSource.Token);
+            if (cancellationTokenSource.IsCancellationRequested ) return;
             var result = response.FirstChoice.Message.Content.ToString();
             chatHistory.Add(response.FirstChoice.Message);
             Log.D($"Received full response: {result}");
@@ -102,9 +123,9 @@ namespace Castrimaris.IO.OpenAI {
 
         private void PartialResultHandler(ChatResponse partialResponse) {
             var partialResult = partialResponse.FirstChoice.Delta.ToString();
-            //Log.D($"Received partial result {partialResult}");
             OnPartialChatResponse.Invoke(partialResult);
         }
-    }
 
+        #endregion
+    }
 }

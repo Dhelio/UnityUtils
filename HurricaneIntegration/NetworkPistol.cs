@@ -1,3 +1,4 @@
+using Castrimaris.Core.Exceptions;
 using HurricaneVR.Framework.Weapons;
 using HurricaneVR.Framework.Weapons.Guns;
 using Unity.Netcode;
@@ -23,6 +24,8 @@ namespace Castrimaris.HurricaneIntegration {
         public void Hit(GunHitArgs gunHitArgs) { if (pistol.Ammo.CurrentCount > 0) HitServerRpc(gunHitArgs.HitPoint); }
 
         private void Awake() {
+            if (hitMarker == null) throw new ReferenceMissingException(nameof(hitMarker));
+
             pistol = GetComponent<HVRPistol>();
             sounds = GetComponent<HVRGunSounds>();
         }
